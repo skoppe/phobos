@@ -3305,7 +3305,12 @@ if (isInputRange!R && !isInfinite!R && isSomeChar!(ElementEncodingType!R) ||
         cenforce(size != -1, to!string(link));
 
         if (size <= bufferLen - maxCodeUnits)
-            return to!string(buffer[0 .. size]);
+	{
+		version (WebAssembly)
+			return to!string(buffer[0 .. cast(size_t)size]);
+		else
+			return to!string(buffer[0 .. size]);
+	}
 
         auto dynamicBuffer = new char[](bufferLen * 3 / 2);
 
@@ -3537,6 +3542,10 @@ else version (NetBSD)
 
         // Only Solaris 10 and later
         return readLink(format("/proc/%d/path/a.out", getpid()));
+    }
+    else version (WebAssembly) // TODO: Needs to be WASI
+    {
+        return readLink("/proc/self/exe"); // have no idea :)
     }
     else
         static assert(0, "thisExePath is not supported on this platform");

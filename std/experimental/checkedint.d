@@ -1491,7 +1491,7 @@ static:
 
     Returns: `cast(Lhs) rhs`
     */
-    Lhs onLowerBound(Rhs, T)(Rhs rhs, T bound)
+    T onLowerBound(Rhs, T)(Rhs rhs, T bound)
     {
         stderr.writefln("Lower bound error: %s(%s) < %s(%s)",
             Rhs.stringof, rhs, T.stringof, bound);

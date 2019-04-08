@@ -5800,34 +5800,36 @@ private:
     // The SPARC FSR is a 32bit register (64 bits for SPARC 7 & 8, but high bits are uninteresting).
     uint flags;
 
-    version (CRuntime_Microsoft)
-    {
-        // Microsoft uses hardware-incompatible custom constants in fenv.h (core.stdc.fenv).
-        // Applies to both x87 status word (16 bits) and SSE2 status word(32 bits).
-        enum : int
-        {
-            INEXACT_MASK   = 0x20,
-            UNDERFLOW_MASK = 0x10,
-            OVERFLOW_MASK  = 0x08,
-            DIVBYZERO_MASK = 0x04,
-            INVALID_MASK   = 0x01,
+    version (IeeeFlagsSupport) {
+	    version (CRuntime_Microsoft)
+	    {
+		    // Microsoft uses hardware-incompatible custom constants in fenv.h (core.stdc.fenv).
+		    // Applies to both x87 status word (16 bits) and SSE2 status word(32 bits).
+		enum : int
+		{
+			INEXACT_MASK   = 0x20,
+			UNDERFLOW_MASK = 0x10,
+			OVERFLOW_MASK  = 0x08,
+			DIVBYZERO_MASK = 0x04,
+			INVALID_MASK   = 0x01,
 
-            EXCEPTIONS_MASK = 0b11_1111
-        }
-        // Don't bother about subnormals, they are not supported on most CPUs.
-        //  SUBNORMAL_MASK = 0x02;
-    }
-    else
-    {
-        enum : int
-        {
-            INEXACT_MASK    = core.stdc.fenv.FE_INEXACT,
-            UNDERFLOW_MASK  = core.stdc.fenv.FE_UNDERFLOW,
-            OVERFLOW_MASK   = core.stdc.fenv.FE_OVERFLOW,
-            DIVBYZERO_MASK  = core.stdc.fenv.FE_DIVBYZERO,
-            INVALID_MASK    = core.stdc.fenv.FE_INVALID,
-            EXCEPTIONS_MASK = core.stdc.fenv.FE_ALL_EXCEPT,
-        }
+			EXCEPTIONS_MASK = 0b11_1111
+		}
+		       // Don't bother about subnormals, they are not supported on most CPUs.
+		       //  SUBNORMAL_MASK = 0x02;
+	    }
+	    else
+	    {
+		enum : int
+       		{
+            		INEXACT_MASK    = core.stdc.fenv.FE_INEXACT,
+            		UNDERFLOW_MASK  = core.stdc.fenv.FE_UNDERFLOW,
+            		OVERFLOW_MASK   = core.stdc.fenv.FE_OVERFLOW,
+            		DIVBYZERO_MASK  = core.stdc.fenv.FE_DIVBYZERO,
+            		INVALID_MASK    = core.stdc.fenv.FE_INVALID,
+            		EXCEPTIONS_MASK = core.stdc.fenv.FE_ALL_EXCEPT
+		}
+	    }
     }
 
 private:
@@ -6123,7 +6125,10 @@ version (D_HardFloat) @safe unittest
     }}
 }
 
-version (X86_Any)
+version (WebAssembly)
+{
+}
+else version (X86_Any)
 {
     version = IeeeFlagsSupport;
 }
@@ -6412,6 +6417,23 @@ nothrow @nogc:
                                  | inexactException | subnormalException,
         }
     }
+    else version (WebAssembly) // TODO: need to be WASI
+    {
+	    // webassembly doesn't have exceptions yet, but just lets copy the x86 section
+        enum : ExceptionMask
+        {
+            inexactException      = 0x20,
+            underflowException    = 0x10,
+            overflowException     = 0x08,
+            divByZeroException    = 0x04,
+            subnormalException    = 0x02,
+            invalidException      = 0x01,
+            severeExceptions   = overflowException | divByZeroException
+                                 | invalidException,
+            allExceptions      = severeExceptions | underflowException
+                                 | inexactException | subnormalException,
+        }
+    }
     else
         static assert(false, "Not implemented for this architecture");
 
@@ -6536,6 +6558,10 @@ private:
     {
         alias ControlState = ushort;
     }
+    else version (WebAssembly)
+    {
+	    alias ControlState = uint;
+    }
     else
         static assert(false, "Not implemented for this architecture");
 
@@ -6646,6 +6672,10 @@ private:
             {
                 cont = __asm!ControlState("vmrs $0, FPSCR", "=r");
             }
+	    else version (WebAssembly) // TODO: needs to be WASI
+	    {
+		    cont = 0;
+	    }
             else
                 assert(0, "Not yet supported");
 
