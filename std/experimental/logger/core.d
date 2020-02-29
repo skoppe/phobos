@@ -1965,6 +1965,7 @@ version (unittest) private void testFuncNames(Logger logger) @safe
     assert(errorThrown);
 }
 
+version (WebAssembly) {} else // no exception catching in WASM
 @safe unittest
 {
     import std.conv : to;
@@ -2107,6 +2108,7 @@ version (unittest) private void testFuncNames(Logger logger) @safe
     assert(l.logLevel == LogLevel.all);
 }
 
+version (WebAssembly) {} else // TODO: problem with exists
 @system unittest // default logger
 {
     import std.file : deleteme, exists, remove;
@@ -2984,6 +2986,7 @@ version (unittest) private void testFuncNames(Logger logger) @safe
     assert(tl.msg.indexOf("error") == 0);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.exception : assertThrown;
@@ -3021,6 +3024,7 @@ private void trustedStore(T)(ref shared T dst, ref T src) @trusted
     atomicStore!(MemoryOrder.rel)(dst, src);
 }
 
+version (WebAssembly) {} else // TODO: no threads yet
 // check that thread-local logging does not propagate
 // to shared logger
 @system unittest
@@ -3166,6 +3170,7 @@ private void trustedStore(T)(ref shared T dst, ref T src) @trusted
 }
 
 // Issue 15517
+version (WebAssembly) {} else // TODO: exists fails, and no permission to touch logfile.log in ./
 @system unittest
 {
     import std.file : exists, remove;

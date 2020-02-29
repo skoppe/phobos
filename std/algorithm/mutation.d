@@ -815,6 +815,7 @@ if (isInputRange!InputRange
     assert(a == [ 8, 9, 8, 9, 8 ]);
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -1993,6 +1994,7 @@ private auto removeImpl(SwapStrategy s, Range, Offset...)(Range range, Offset of
     }
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -2064,6 +2066,7 @@ private auto removeImpl(SwapStrategy s, Range, Offset...)(Range range, Offset of
     }
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @safe unittest
 {
     char[] chars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
@@ -2962,6 +2965,7 @@ if (isBlitAssignable!T && !is(typeof(lhs.proxySwap(rhs))))
     swap(a, b);
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest // 9975
 {
     import std.exception : doesPointTo, mayPointTo;

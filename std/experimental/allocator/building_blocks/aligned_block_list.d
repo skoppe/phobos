@@ -363,6 +363,7 @@ struct AlignedBlockList(Allocator, ParentAllocator, ulong theAlignment = (1 << 2
     }
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 ///
 @system unittest
 {
@@ -523,6 +524,7 @@ shared struct SharedAlignedBlockList(Allocator, ParentAllocator, ulong theAlignm
     }
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 ///
 @system unittest
 {
@@ -580,6 +582,7 @@ version (unittest)
     }
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     import std.experimental.allocator.building_blocks.region;
@@ -640,6 +643,7 @@ version (unittest)
     }
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     import std.experimental.allocator.building_blocks.ascending_page_allocator : AscendingPageAllocator;

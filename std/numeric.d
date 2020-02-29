@@ -649,6 +649,7 @@ public:
     }
 }
 
+version (WebAssembly) {} else // no support for printing long-doubles, add -lc-printscan-long-double to enable it
 @system unittest
 {
     // @system due to to!string(CustomFloat)
@@ -881,6 +882,7 @@ public:
     assert(a.significand == 0);
 }
 
+version (WebAssembly) {} else // no support exceptions in WASM
 @system unittest
 {
     import std.exception : assertThrown;
@@ -892,6 +894,7 @@ public:
     assertThrown!AssertError(a = real.max);
 }
 
+version (WebAssembly) {} else // no support exceptions in WASM
 @system unittest
 {
     import std.exception : assertThrown;
@@ -903,6 +906,7 @@ public:
     assertThrown!AssertError(a = real.max);
 }
 
+version (WebAssembly) {} else // no support exceptions in WASM
 @system unittest
 {
     import std.exception : assertThrown;

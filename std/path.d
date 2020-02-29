@@ -95,6 +95,7 @@ $(TR $(TD Other) $(TD
 */
 module std.path;
 
+version (WebAssembly) version = WASI_libc; // Always use the WASI libc for translating libc calls to wasi, see https://github.com/CraneStation/wasi-libc
 
 import std.file : getcwd;
 static import std.meta;
@@ -123,6 +124,7 @@ private:
 */
 version (Posix)          enum string dirSeparator = "/";
 else version (Windows)   enum string dirSeparator = "\\";
+else version (WebAssembly)   enum string dirSeparator = "/";
 else static assert(0, "unsupported platform");
 
 
@@ -133,6 +135,7 @@ else static assert(0, "unsupported platform");
 */
 version (Posix)          enum string pathSeparator = ":";
 else version (Windows)   enum string pathSeparator = ";";
+else version (WebAssembly)   enum string pathSeparator = ":";
 else static assert(0, "unsupported platform");
 
 
@@ -185,6 +188,7 @@ version (Windows) private bool isSeparator(dchar c)  @safe pure nothrow @nogc
     return isDirSeparator(c) || isDriveSeparator(c);
 }
 version (Posix) private alias isSeparator = isDirSeparator;
+version (WebAssembly) private alias isSeparator = isDirSeparator;
 
 
 /*  Helper function that determines the position of the last
@@ -356,6 +360,8 @@ enum CaseSensitive : bool
 
     version (Posix)
         assert(relativePath!(CaseSensitive.no)("/FOO/bar", "/foo/baz") == "../bar");
+    else version (WebAssembly)
+        assert(relativePath!(CaseSensitive.no)("/FOO/bar", "/foo/baz") == "../bar");
     else
         assert(relativePath!(CaseSensitive.no)(`c:\FOO\bar`, `c:\foo\baz`) == `..\bar`);
 }
@@ -363,6 +369,7 @@ enum CaseSensitive : bool
 version (Windows)    private enum osDefaultCaseSensitivity = false;
 else version (OSX)   private enum osDefaultCaseSensitivity = false;
 else version (Posix) private enum osDefaultCaseSensitivity = true;
+else version (WebAssembly) private enum osDefaultCaseSensitivity = true;
 else static assert(0);
 
 /**
@@ -776,6 +783,10 @@ private auto _rootName(R)(R path)
     {
         if (isDirSeparator(path[0])) return path[0 .. 1];
     }
+    else version (WebAssembly)
+      {
+        if (isDirSeparator(path[0])) return path[0 .. 1];
+      }
     else version (Windows)
     {
         if (isDirSeparator(path[0]))
@@ -852,6 +863,8 @@ if (isSomeChar!C)
         immutable result = "";
     else version (Windows)
         immutable result = "d:";
+    else version (WASI_libc)
+        immutable result = "";
 
     enum S : string { a = "d:/file" }
     assert(S.a.driveName == result);
@@ -865,7 +878,8 @@ if (isSomeChar!C)
     import std.array;
     import std.utf : byChar;
 
-    version (Posix)  assert(driveName("c:/foo".byChar).empty);
+    version (Posix)     assert(driveName("c:/foo".byChar).empty);
+    version (WASI_libc) assert(driveName("c:/foo".byChar).empty);
     version (Windows)
     {
         assert(driveName(`dir\file`.byChar).empty);
@@ -934,6 +948,8 @@ if (isSomeChar!C)
         immutable result = "d:/dir/file";
     else version (Windows)
         immutable result = "/dir/file";
+    else version (WASI_libc)
+        immutable result = "d:/dir/file";
 
     enum S : string { a = "d:/dir/file" }
     assert(S.a.stripDrive == result);
@@ -1645,6 +1661,10 @@ if ((isRandomAccessRange!R1 && hasSlicing!R1 && hasLength!R1 && isSomeChar!(Elem
                 {
                     pos = 0;
                 }
+                else version (WebAssembly)
+                  {
+                    pos = 0;
+                  }
                 else version (Windows)
                 {
                     if (isAbsolute(r2))
@@ -1861,6 +1881,9 @@ if (isSomeChar!C)
         assert(buildNormalizedPath(`\\server\share\foo\bar`, `..\.\\baz\..`, `wee\`) == `\\server\share\foo\wee`);
 
         static assert(buildNormalizedPath(`\foo\..\..\`, `bar\baz`) == `\bar\baz`);
+    }
+    else version (WASI_libc) {
+        // TODO:
     }
     else static assert(0);
 }
@@ -2163,6 +2186,9 @@ if (isConvertibleToString!R)
         assert(asNormalizedPath(`.\foo\..`).array == ".");
         assert(asNormalizedPath(`foo\..`).array == ".");
     }
+    else version (WASI_libc) {
+        // TODO:
+    }
     else static assert(0);
 }
 
@@ -2270,6 +2296,9 @@ if (isConvertibleToString!R)
         // The ultimate path
         assert(asNormalizedPath(`c:\foo\..\bar\\.\..\...\\\baz\\`).array == `c:\...\baz`);
         static assert(asNormalizedPath(`c:\foo\..\bar\\.\..\...\\\baz\\`).array == `c:\...\baz`);
+    }
+    else version (WASI_libc) {
+        // TODO:
     }
     else static assert(false);
 }
@@ -2414,6 +2443,19 @@ if ((isRandomAccessRange!R && hasSlicing!R ||
                     popFront();
                 }
             }
+            else version (WebAssembly)
+              {
+                if (_path.length >= 1 && isDirSeparator(_path[0]))
+                  {
+                    fs = 0;
+                    fe = 1;
+                    ps = ltrim(fe, pe);
+                  }
+                else
+                  {
+                    popFront();
+                  }
+              }
             else static assert(0);
 
             if (ps == pe)
@@ -2568,8 +2610,9 @@ if (isRandomAccessRange!R && isSomeChar!(ElementType!R) ||
     is(StringTypeOf!R))
 {
     if (path.length >= 1 && isDirSeparator(path[0])) return true;
-    version (Posix)         return false;
-    else version (Windows)  return isAbsolute!(BaseOf!R)(path);
+    version (Posix)             return false;
+    else version (WebAssembly)  return false;
+    else version (Windows)      return isAbsolute!(BaseOf!R)(path);
 }
 
 ///
@@ -2672,6 +2715,10 @@ else version (Posix)
 {
     alias isAbsolute = isRooted;
 }
+ else version (WebAssembly)
+   {
+     alias isAbsolute = isRooted;
+   }
 
 
 @safe unittest
@@ -2768,6 +2815,7 @@ string absolutePath(string path, lazy string base = getcwd())
     }
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     version (Posix)
@@ -2919,6 +2967,7 @@ string relativePath(CaseSensitive cs = CaseSensitive.osDefault)
     }
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     import std.exception;
@@ -2934,6 +2983,9 @@ string relativePath(CaseSensitive cs = CaseSensitive.osDefault)
         relativePath(`\foo`);
         assert(relativePath(`c:\foo\bar\baz`, `c:\foo\bar`) == "baz");
         assertThrown(relativePath(`c:\foo`, "bar"));
+    }
+    else version (WASI_libc) {
+        // TODO:
     }
     else static assert(0);
 }
@@ -3048,6 +3100,9 @@ if ((isNarrowString!R1 ||
         assert(asRelativePath(`c:\foo\bar\baz`, `c:\foo\bar`).array == "baz");
         assert(asRelativePath(`c:\foo\bar`, `d:\foo`).array == `c:\foo\bar`);
         assert(asRelativePath(`\\foo\bar`, `c:\foo`).array == `\\foo\bar`);
+    }
+    else version (WASI_libc) {
+        // TODO:
     }
     else
         static assert(0);
@@ -3637,6 +3692,9 @@ if ((isRandomAccessRange!Range && hasLength!Range && hasSlicing!Range && isSomeC
         {
             if (c == 0 || c == '/') return false;
         }
+        else version (WASI_libc) {
+            if (c == 0 || c == '/') return false;
+        }
         else static assert(0);
     }
     version (Windows)
@@ -3678,6 +3736,7 @@ unittest
     auto pfdep = [`foo\bar`, "*.txt"];
     version (Windows) invalid ~= pfdep;
     else version (Posix) valid ~= pfdep;
+    else version (WASI_libc) valid ~= pfdep;
     else static assert(0);
 
     import std.meta : AliasSeq;
@@ -3825,6 +3884,10 @@ if ((isRandomAccessRange!Range && hasLength!Range && hasSlicing!Range && isSomeC
     {
         remainder = path;
     }
+    else version (WASI_libc)
+        {
+            remainder = path;
+        }
     else static assert(0);
     remainder = ltrimDirSeparators(remainder);
 
@@ -3938,7 +4001,12 @@ if (isConvertibleToString!Range)
 */
 string expandTilde(string inputPath) @safe nothrow
 {
-    version (Posix)
+  version (Posix)
+    enum PosixImpl;
+  else version (WebAssembly)
+    enum PosixImpl;
+
+  static if (is(PosixImpl))
     {
         import core.exception : onOutOfMemoryError;
         import core.stdc.errno : errno, ERANGE;
@@ -3996,8 +4064,11 @@ string expandTilde(string inputPath) @safe nothrow
         // Replaces the tilde from path with the path from the user database.
         static string expandFromDatabase(string path) @safe nothrow
         {
-            // bionic doesn't really support this, as getpwnam_r
-            // isn't provided and getpwnam is basically just a stub
+            version (WebAssembly) {
+                return path;
+            } else
+                  // bionic doesn't really support this, as getpwnam_r
+                  // isn't provided and getpwnam is basically just a stub
             version (CRuntime_Bionic)
             {
                 return path;

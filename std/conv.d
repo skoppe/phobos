@@ -75,6 +75,7 @@ class ConvException : Exception
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -183,6 +184,7 @@ class ConvOverflowException : ConvException
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -257,6 +259,7 @@ template to(T)
  * truncate. (_To round a floating point value when casting _to an
  * integral, use `roundTo`.)
  */
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -308,6 +311,7 @@ template to(T)
    to consist of a single code point, and said code point must
    fit in the target type. Otherwise, $(LREF ConvException) is thrown.
  */
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -367,6 +371,7 @@ template to(T)
  * Object-to-object conversions by dynamic casting throw exception when
  * the source is non-null and the target is null.
  */
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -462,6 +467,7 @@ template to(T)
 }
 
 // Tests for issue 8729: do NOT skip leading WS
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -533,6 +539,7 @@ if (isImplicitlyConvertible!(S, T) &&
 }
 
 // Tests for issue 6377
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -846,6 +853,7 @@ if (!isImplicitlyConvertible!(S, T) &&
 }
 
 // Unittest for 6288
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -1484,6 +1492,7 @@ if (!isImplicitlyConvertible!(S, T) &&
     return (ref value)@trusted{ return cast(T) value; }(value);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -1509,6 +1518,7 @@ if (!isImplicitlyConvertible!(S, T) &&
     dchar to4 = to!dchar(from4);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -1542,6 +1552,7 @@ if (!isImplicitlyConvertible!(S, T) &&
 
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -1589,6 +1600,7 @@ if (!isImplicitlyConvertible!(S, T) &&
     }
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -1673,6 +1685,7 @@ if (!isImplicitlyConvertible!(S, T) && isAssociativeArray!S &&
     auto b = to!(double[dstring])(a);
     assert(b["0"d] == 1 && b["1"d] == 2);
 }
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest // Bugzilla 8705, from doc
 {
     import std.exception;
@@ -1769,6 +1782,7 @@ private void testFloatingToIntegral(Floating, Integral)()
     }
 }
 
+version (WebAssembly) {} else // TODO: testFloatingToIntegral fails...
 @safe pure unittest
 {
     alias AllInts = AliasSeq!(byte, ubyte, short, ushort, int, uint, long, ulong);
@@ -1847,6 +1861,7 @@ private void testFloatingToIntegral(Floating, Integral)()
     }
 }
 
+version (WebAssembly) {} else // long-double printing isn't supported. add -lc-printscan-long-double to enable it
 @safe unittest
 {
     alias AllInts = AliasSeq!(byte, ubyte, short, ushort, int, uint, long, ulong);
@@ -1920,6 +1935,7 @@ if (isInputRange!S && !isInfinite!S && isSomeChar!(ElementEncodingType!S) &&
     return parse!T(value, radix);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     // Issue 6668 - ensure no collaterals thrown
@@ -1988,6 +2004,7 @@ if (isSomeChar!T && !is(typeof(parse!T(value))) &&
     return decodedCodepoint[0];
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -2021,6 +2038,7 @@ if (is(T == enum) && !is(S == enum)
     throw new ConvException(convFormat("Value (%s) does not match any member value of enum '%s'", value, T.stringof));
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -2067,6 +2085,7 @@ template roundTo(Target)
     assert(roundTo!(const int)(to!(const double)(-3.999)) == -4);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2080,6 +2099,7 @@ template roundTo(Target)
     }
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2163,6 +2183,7 @@ Lerr:
     assert(b);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -2435,6 +2456,7 @@ Lerr:
     }
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -2511,6 +2533,7 @@ Lerr:
     }
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     void checkErrMsg(string input, dchar charInMsg, dchar charNotInMsg)
@@ -2550,6 +2573,7 @@ Lerr:
 }
 
 // Issue 13931
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -2685,6 +2709,7 @@ do
     assert(r.front == '!');
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest // bugzilla 13163
 {
     import std.exception;
@@ -2698,6 +2723,7 @@ do
     assert(parse!uint(str) == 0);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest // bugzilla 18248
 {
     import std.exception : assertThrown;
@@ -2758,6 +2784,7 @@ if (isSomeString!Source && !is(Source == enum) &&
     assert(parse!EnumType(str) == EnumType.a);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -3090,6 +3117,7 @@ if (isInputRange!Source && isSomeChar!(ElementType!Source) && !is(Source == enum
     assert(parse!double(str).approxEqual(123.456));
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -3194,6 +3222,7 @@ if (isInputRange!Source && isSomeChar!(ElementType!Source) && !is(Source == enum
 }
 
 // Tests for the double implementation
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     // @system because strtod is not @safe.
@@ -3267,6 +3296,7 @@ if (isInputRange!Source && isSomeChar!(ElementType!Source) && !is(Source == enum
     }
 }
 
+version (WebAssembly) {} else // long-double printing isn't supported. add -lc-printscan-long-double to enable it
 @system unittest
 {
     import core.stdc.errno;
@@ -3319,8 +3349,10 @@ if (isInputRange!Source && isSomeChar!(ElementType!Source) && !is(Source == enum
         else
             ld1 = strtold(s.ptr, null);
     }
-    else
+    else {
+        version (WebAssembly) {        strtold(s.ptr, null, &ld1);} else
         ld1 = strtold(s.ptr, null);
+    }
 
     x1 = *cast(longdouble *)&ld1;
     assert(x1 == x && ld1 == ld);
@@ -3331,10 +3363,12 @@ if (isInputRange!Source && isSomeChar!(ElementType!Source) && !is(Source == enum
     ld = parse!real(s2);
     assert(s2.empty);
     x = *cast(longdouble *)&ld;
-    ld1 = strtold("1.0e5", null);
+    version (WebAssembly) {        strtold("1.0e5", null, &ld1);} else
+                                                                    ld1 = strtold("1.0e5", null);
     x1 = *cast(longdouble *)&ld1;
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -3450,6 +3484,7 @@ if (!isSomeString!Source && isInputRange!Source && isSomeChar!(ElementType!Sourc
 /*
     Tests for to!bool and parse!bool
 */
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -3505,6 +3540,7 @@ if (isInputRange!Source &&
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -3610,6 +3646,7 @@ if (isSomeString!Source && !is(Source == enum) &&
     assert(a2 == ["aaa", "bbb", "ccc"]);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest // Bugzilla 9615
 {
     string s0 = "[1,2, ]";
@@ -3656,6 +3693,7 @@ if (isSomeString!Source && !is(Source == enum) &&
     assert( ia == ia2);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -3748,6 +3786,7 @@ Lfewerr:
     throw parseError(text("Too few elements in input, ", result.length, " elements expected."));
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -3836,6 +3875,7 @@ if (isSomeString!Source && !is(Source == enum) &&
     assert(aa3 == ["aaa":[1], "bbb":[2,3], "ccc":[4,5,6]]);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -3961,6 +4001,7 @@ if (isInputRange!Source && isSomeChar!(ElementType!Source))
     }
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;

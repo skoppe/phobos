@@ -311,6 +311,7 @@ import std.uni : Escapables; // characters that need escaping
 }
 
 // bugzilla 7551
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     auto r = regex("[]abc]*");
@@ -462,12 +463,14 @@ import std.uni : Escapables; // characters that need escaping
 }
 
 // bugzilla 11775
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     assert(collectException(regex("a{1,0}")));
 }
 
 // bugzilla 11839
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -511,6 +514,7 @@ import std.uni : Escapables; // characters that need escaping
 }
 
 // bugzilla 12582
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     auto r = regex(`(?P<a>abc)`);
@@ -525,12 +529,14 @@ import std.uni : Escapables; // characters that need escaping
 }
 
 //bugzilla  12713
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     assertThrown(regex("[[a-z]([a-z]|(([[a-z])))"));
 }
 
 //bugzilla 12747
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     assertThrown(regex(`^x(\1)`));
@@ -615,6 +621,7 @@ version (none) // TODO: revist once we have proper benchmark framework
     regex(`(<a (?:(?:\w+=\"[^"]*\")?\s*)*href="\.\.?)"`);
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     auto r = regex("(?# comment)abc(?# comment2)");
@@ -656,6 +663,7 @@ version (none) // TODO: revist once we have proper benchmark framework
 }
 
 // bugzilla 17667
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     import std.algorithm.searching : canFind;
@@ -672,6 +680,7 @@ version (none) // TODO: revist once we have proper benchmark framework
 }
 
 // bugzilla 17668
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     import std.algorithm.searching;

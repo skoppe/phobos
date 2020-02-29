@@ -142,6 +142,7 @@ class CSVException : Exception
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : collectException;
@@ -152,6 +153,7 @@ class CSVException : Exception
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : collectException;
@@ -201,6 +203,7 @@ class IncompleteCellException : CSVException
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -241,6 +244,7 @@ class HeaderMismatchException : CSVException
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -278,6 +282,7 @@ enum Malformed
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -518,6 +523,7 @@ The header from the input can always be accessed from the `header` field.
 }
 
 // Test shorter row length exception
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception;
@@ -624,6 +630,7 @@ The header from the input can always be accessed from the `header` field.
 }
 
 // Test header interface
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.algorithm;
@@ -703,6 +710,7 @@ The header from the input can always be accessed from the `header` field.
 }
 
 // Test partial data returned
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     string str = "\"one\nnew line";
@@ -1631,6 +1639,7 @@ if (isSomeChar!Separator && isInputRange!Range
 }
 
 // Test exceptions
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.array;

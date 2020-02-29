@@ -719,6 +719,7 @@ class UnCompress
                 "The uncompressed and the original data differ");
     }
 
+    version (WebAssembly) {} else // WASM has no support for exceptions yet
     @system unittest
     {
         ubyte[1024] invalidData;

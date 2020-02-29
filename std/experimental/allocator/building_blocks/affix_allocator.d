@@ -440,6 +440,7 @@ struct AffixAllocator(Allocator, Prefix, Suffix = void)
         && B.suffix(b) == 0xDEAD_BEEF);
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     import std.experimental.allocator.building_blocks.bitmapped_block
@@ -452,6 +453,7 @@ struct AffixAllocator(Allocator, Prefix, Suffix = void)
     });
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 // Test empty
 @system unittest
 {

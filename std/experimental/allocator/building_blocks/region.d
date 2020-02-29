@@ -405,6 +405,7 @@ struct Region(ParentAllocator = NullAllocator,
     testAlloc(sharedReg);
 }
 
+version (WebAssembly) {} else // TODO: no AlignedMallocator yet
 @system nothrow @nogc unittest
 {
     import std.experimental.allocator.mallocator : AlignedMallocator;
@@ -520,6 +521,7 @@ struct InSituRegion(size_t size, size_t minAlign = platformAlignment)
     else version (SPARC) enum growDownwards = Yes.growDownwards;
     else version (SPARC64) enum growDownwards = Yes.growDownwards;
     else version (SystemZ) enum growDownwards = Yes.growDownwards;
+    else version (WebAssembly) enum growDownwards = Yes.growDownwards;
     else static assert(0, "Dunno how the stack grows on this architecture.");
 
     @disable this(this);
@@ -655,6 +657,7 @@ struct InSituRegion(size_t size, size_t minAlign = platformAlignment)
 }
 
 ///
+version (WebAssembly) {} else // TODO: no BitmappedBlock yet
 @system unittest
 {
     // 128KB region, allocated to x86's cache line
@@ -689,6 +692,7 @@ struct InSituRegion(size_t size, size_t minAlign = platformAlignment)
     assert(a4.length == 104);
 }
 
+version (WebAssembly) {} else // TODO: InSituRegion messes up the stack.. ?!?!
 @system pure nothrow unittest
 {
     import std.typecons : Ternary;
@@ -925,6 +929,7 @@ version (Posix) struct SbrkRegion(uint minAlign = platformAlignment)
     }
 }
 
+version (WebAssembly) {} else // TODO: WASM uses sbrk itself, and this messes it up
 version (CRuntime_Musl) {} else
 version (DragonFlyBSD) {} else
 version (Posix) @system nothrow @nogc unittest
@@ -939,6 +944,7 @@ version (Posix) @system nothrow @nogc unittest
     sbrk(-4096);
 }
 
+version (WebAssembly) {} else // TODO: WASM uses sbrk itself, and this messes it up
 version (CRuntime_Musl) {} else
 version (DragonFlyBSD) {} else
 version (Posix) @system nothrow @nogc unittest
@@ -1257,6 +1263,7 @@ shared struct SharedRegion(ParentAllocator = NullAllocator,
     }
 }
 
+version (WebAssembly) {} else // TODO: no ThreadGroup yet
 @system unittest
 {
     import std.experimental.allocator.mallocator : Mallocator;
@@ -1322,6 +1329,7 @@ shared struct SharedRegion(ParentAllocator = NullAllocator,
     testAlloc(a2, false);
 }
 
+version (WebAssembly) {} else // TODO: no ThreadGroup yet
 @system unittest
 {
     import std.experimental.allocator.mallocator : Mallocator;

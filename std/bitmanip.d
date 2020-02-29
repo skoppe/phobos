@@ -651,6 +651,7 @@ unittest
 }
 
 // Issue 12477
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import core.exception : AssertError;

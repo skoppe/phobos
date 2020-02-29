@@ -4,6 +4,7 @@ Source: $(PHOBOSSRC std/experimental/allocator/_mmap_allocator.d)
 */
 module std.experimental.allocator.mmap_allocator;
 
+version (WebAssembly) {} else: // TODO: we don't support mmap yet
 /**
 Allocator (currently defined only for Posix and Windows) using
 $(D $(LINK2 https://en.wikipedia.org/wiki/Mmap, mmap))

@@ -3849,6 +3849,7 @@ Appender!(E[]) appender(A : E[], E)(auto ref A array)
     return Appender!(E[])(array);
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @safe pure nothrow unittest
 {
     import std.exception;
@@ -4280,6 +4281,7 @@ unittest
     assert(app2.capacity >= 5);
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import std.exception;
@@ -4526,6 +4528,7 @@ nothrow pure @safe unittest
 // are thrown. Unfortunately can't test that memory is initialized
 // before having a destructor called on it.
 // @system required because of issue 18872.
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system nothrow unittest
 {
     // exists only to allow doing something in the destructor. Not tested

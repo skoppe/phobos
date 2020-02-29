@@ -1374,6 +1374,7 @@ if (!is(Unqual!T == bool))
     assert(equal(a[], [1]));
 }
 // make sure that Array instances refuse ranges that don't belong to them
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import std.exception : assertThrown;

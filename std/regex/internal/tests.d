@@ -54,6 +54,7 @@ debug(std_regex_test) import std.stdio;
 
  */
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     struct TestVectors
@@ -464,4 +465,3 @@ debug(std_regex_test) import std.stdio;
     run_tests!bmatch(); //backtracker
     run_tests!match(); //thompson VM
 }
-

@@ -123,6 +123,7 @@ public:
         this(s.byCodeUnit);
     }
 
+    version (WebAssembly) {} else // WASM has no support for exceptions yet
     @system unittest
     {
         // system because of the dummy ranges eventually call std.array!string
@@ -779,6 +780,7 @@ public:
     }
 
     ///
+    version (WebAssembly) {} else // WASM has no support for exceptions yet
     @system unittest
     {
         import std.conv : to, ConvOverflowException;
@@ -792,6 +794,7 @@ public:
         assertThrown!ConvOverflowException(BigInt("-1").to!ubyte);
     }
 
+    version (WebAssembly) {} else // WASM has no support for exceptions yet
     @system unittest
     {
         import std.conv : to, ConvOverflowException;
@@ -1876,6 +1879,7 @@ unittest
     assert(l5 == b5);
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest // 11600
 {
     import std.conv;
@@ -2003,6 +2007,7 @@ unittest
 }
 
 // issue 15678
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import std.exception : assertThrown;

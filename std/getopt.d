@@ -657,6 +657,7 @@ private template optionValidator(A...)
     static assert(optionValidator!(C,A,P,C,A,S,F) == "");
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest // bugzilla 15914
 {
     import std.exception : assertThrown;
@@ -982,6 +983,7 @@ private bool handleOption(R)(string option, R receiver, ref string[] args,
 }
 
 // 17574
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     import std.algorithm.searching : startsWith;
@@ -1184,6 +1186,7 @@ private void setConfig(ref configuration cfg, config option) @safe pure nothrow 
     }
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     import std.conv;
@@ -1456,6 +1459,7 @@ private void setConfig(ref configuration cfg, config option) @safe pure nothrow 
     assert(o == "str");
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest // 5228
 {
     import std.conv;
@@ -1469,6 +1473,7 @@ private void setConfig(ref configuration cfg, config option) @safe pure nothrow 
     assertThrown!ConvException(getopt(args, "abc", &abc));
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest // From bugzilla 7693
 {
     import std.exception;
@@ -1489,6 +1494,7 @@ private void setConfig(ref configuration cfg, config option) @safe pure nothrow 
     assertNotThrown(getopt(args, "foo", &foo));
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest // same bug as 7693 only for bool
 {
     import std.exception;
@@ -1532,6 +1538,7 @@ private void setConfig(ref configuration cfg, config option) @safe pure nothrow 
     assert(bar);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     import std.exception;
@@ -1727,6 +1734,7 @@ void defaultGetoptFormatter(Output)(Output output, string text, Option[] opt, st
     assert(wanted == helpMsg, helpMsg ~ wanted);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest // Issue 14724
 {
     bool a;
@@ -1747,6 +1755,7 @@ void defaultGetoptFormatter(Output)(Output output, string text, Option[] opt, st
 }
 
 // throw on duplicate options
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     import core.exception : AssertError;

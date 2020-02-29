@@ -633,6 +633,7 @@ public:
         assert(DateTime(Date(-100, 1, 1), TimeOfDay(4, 59, 0)).yearBC == 101);
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((DateTime dt){dt.yearBC;}(DateTime(Date(1, 1, 1))));
@@ -673,6 +674,7 @@ public:
         assert(dt == DateTime(Date(-9, 1, 1), TimeOfDay(7, 30, 0)));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((DateTime dt){dt.yearBC = -1;}(DateTime(Date(1, 1, 1))));
@@ -731,6 +733,7 @@ public:
         _date.month = month;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         static void testDT(DateTime dt, Month month, DateTime expected = DateTime.init, size_t line = __LINE__)
@@ -814,6 +817,7 @@ public:
         _date.day = day;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         import std.exception : assertNotThrown;
@@ -935,6 +939,7 @@ public:
         _tod.hour = hour;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((){DateTime(Date(1999, 7, 6), TimeOfDay(0, 0, 0)).hour = 24;}());
@@ -985,6 +990,7 @@ public:
         _tod.minute = minute;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((){DateTime.init.minute = 60;}());
@@ -1035,6 +1041,7 @@ public:
         _tod.second = second;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((){DateTime.init.second = 60;}());
@@ -3178,6 +3185,7 @@ public:
                DateTime(Date(2010, 7, 4), TimeOfDay(7, 6, 12)));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException(DateTime.fromISOString(""));
@@ -3279,6 +3287,7 @@ public:
                DateTime(Date(2010, 7, 4), TimeOfDay(7, 6, 12)));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException(DateTime.fromISOExtString(""));
@@ -3375,6 +3384,7 @@ public:
                DateTime(Date(2010, 7, 4), TimeOfDay(7, 6, 12)));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException(DateTime.fromISOString(""));
@@ -3768,6 +3778,7 @@ public:
         _day   = cast(ubyte) day;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         import std.exception : assertNotThrown;
@@ -4126,6 +4137,7 @@ public:
         assert(Date(-7, 4, 5).year == -7);
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         static void testDateInvalid(Date date, int year)
@@ -4175,6 +4187,7 @@ public:
         assert(Date(-100, 1, 1).yearBC == 101);
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((Date date){date.yearBC;}(Date(1, 1, 1)));
@@ -4216,6 +4229,7 @@ public:
         assert(date == Date(-9, 1, 1));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((Date date){date.yearBC = -1;}(Date(1, 1, 1)));
@@ -4276,6 +4290,7 @@ public:
         _month = cast(Month) month;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         static void testDate(Date date, Month month, Date expected = Date.init)
@@ -4354,6 +4369,7 @@ public:
         _day = cast(ubyte) day;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         import std.exception : assertNotThrown;
@@ -7538,6 +7554,7 @@ public:
         assert(Date.fromISOString(" 20100704 ") == Date(2010, 7, 4));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException(Date.fromISOString(""));
@@ -7676,6 +7693,7 @@ public:
         assert(Date.fromISOExtString(" 2010-07-04 ") == Date(2010, 7, 4));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException(Date.fromISOExtString(""));
@@ -7814,6 +7832,7 @@ public:
         assert(Date.fromSimpleString(" 2010-Jul-04 ") == Date(2010, 7, 4));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException(Date.fromSimpleString(""));
@@ -8202,6 +8221,7 @@ public:
         _second = cast(ubyte) second;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assert(TimeOfDay(0, 0) == TimeOfDay.init);
@@ -8336,6 +8356,7 @@ public:
         _hour = cast(ubyte) hour;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((){TimeOfDay(0, 0, 0).hour = 24;}());
@@ -8387,6 +8408,7 @@ public:
         _minute = cast(ubyte) minute;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((){TimeOfDay(0, 0, 0).minute = 60;}());
@@ -8438,6 +8460,7 @@ public:
         _second = cast(ubyte) second;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException((){TimeOfDay(0, 0, 0).second = 60;}());
@@ -9103,6 +9126,7 @@ public:
         assert(TimeOfDay.fromISOString(" 123033 ") == TimeOfDay(12, 30, 33));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException(TimeOfDay.fromISOString(""));
@@ -9228,6 +9252,7 @@ public:
         assert(TimeOfDay.fromISOExtString(" 12:30:33 ") == TimeOfDay(12, 30, 33));
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @safe unittest
     {
         assertThrown!DateTimeException(TimeOfDay.fromISOExtString(""));
@@ -9603,6 +9628,7 @@ if (units == "months" ||
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown, assertNotThrown;
@@ -9644,6 +9670,7 @@ if (units == "days")
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown, assertNotThrown;
@@ -10034,6 +10061,7 @@ int cmpTimeUnits(string lhs, string rhs) @safe pure
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -10418,6 +10446,7 @@ if (isSomeString!T)
     }
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.conv : to;

@@ -535,6 +535,7 @@ if (isNarrowString!R1 && isNarrowString!R2)
         return commonPrefix!"a == b"(r1, r2);
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -3463,6 +3464,7 @@ if (isInputRange!Range && !isInfinite!Range &&
     assert(a.maxCount == tuple(4, 2));
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import std.conv : text;

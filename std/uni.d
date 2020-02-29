@@ -2509,6 +2509,7 @@ public:
             ~"[0XA640..0XA698) [0XA69F..0XA6A0)");
     }
 
+    version (WebAssembly) {} else // exceptions are supported in WASM
     pure @safe unittest
     {
         import std.exception : assertThrown;
@@ -5434,6 +5435,7 @@ pure @safe unittest
 }
 
 // cover decode fail cases of Matcher
+version (WebAssembly) {} else // exceptions are supported in WASM
 pure @system unittest
 {
     import std.algorithm.iteration : map;
@@ -6213,6 +6215,7 @@ package dchar parseUniHex(Range)(ref Range str, size_t maxDigit)
     return val;
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.algorithm.searching : canFind;
@@ -6738,6 +6741,7 @@ struct UnicodeSetParser(Range)
     }
 
     ///
+    version (WebAssembly) {} else // exceptions are supported in WASM
     @safe unittest
     {
         import std.exception : collectException;

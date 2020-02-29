@@ -37,6 +37,7 @@ class URIException : Exception
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -172,6 +173,7 @@ private string URI_Encode(dstring str, uint unescapedSet) @safe pure
     return R[0 .. Rlen].idup;
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -290,6 +292,7 @@ if (isSomeChar!Char)
     return R[0 .. Rlen].idup;
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;

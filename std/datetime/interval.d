@@ -1605,6 +1605,7 @@ private:
 }
 
 // Test Interval's constructors.
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -1715,6 +1716,7 @@ private:
 }
 
 // Test Interval's contains(time point).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -1747,6 +1749,7 @@ private:
 }
 
 // Test Interval's contains(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -1849,6 +1852,7 @@ private:
 }
 
 // Test Interval's isBefore(time point).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -1881,6 +1885,7 @@ private:
 }
 
 // Test Interval's isBefore(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -1984,6 +1989,7 @@ private:
 }
 
 // Test Interval's isAfter(time point).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2016,6 +2022,7 @@ private:
 }
 
 // Test Interval's isAfter(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2118,6 +2125,7 @@ private:
 }
 
 // Test Interval's intersects().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2222,6 +2230,7 @@ private:
 }
 
 // Test Interval's intersection().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2362,6 +2371,7 @@ private:
 }
 
 // Test Interval's isAdjacent().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2471,6 +2481,7 @@ private:
 }
 
 // Test Interval's merge().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2616,6 +2627,7 @@ private:
 }
 
 // Test Interval's span().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2751,6 +2763,7 @@ private:
 }
 
 // Test Interval's shift(duration).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2791,6 +2804,7 @@ private:
 }
 
 // Test Interval's shift(int, int, AllowDayOverflow).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2845,6 +2859,7 @@ private:
 }
 
 // Test Interval's expand(Duration).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2886,6 +2901,7 @@ private:
 }
 
 // Test Interval's expand(int, int, AllowDayOverflow, Direction)
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -2997,6 +3013,7 @@ private:
 }
 
 // Test Interval's fwdRange.
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.datetime.date;
@@ -3065,6 +3082,7 @@ private:
 }
 
 // Test Interval's bwdRange.
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.datetime.date;
@@ -4254,6 +4272,7 @@ private:
 }
 
 //Test PosInfInterval's contains(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -4379,6 +4398,7 @@ private:
 }
 
 //Test PosInfInterval's isBefore(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -4503,6 +4523,7 @@ private:
 }
 
 //Test PosInfInterval's isAfter(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -4600,6 +4621,7 @@ private:
 }
 
 //Test PosInfInterval's intersects().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -4697,6 +4719,7 @@ private:
 }
 
 //Test PosInfInterval's intersection().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -4815,6 +4838,7 @@ private:
 }
 
 //Test PosInfInterval's isAdjacent().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -4911,6 +4935,7 @@ private:
 }
 
 //Test PosInfInterval's merge().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -5020,6 +5045,7 @@ private:
 }
 
 //Test PosInfInterval's span().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -5291,6 +5317,7 @@ private:
 }
 
 //Test PosInfInterval's fwdRange().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.datetime.date;
@@ -6476,6 +6503,7 @@ private:
 }
 
 //Test NegInfInterval's contains(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -6602,6 +6630,7 @@ private:
 }
 
 //Test NegInfInterval's isBefore(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -6724,6 +6753,7 @@ private:
 }
 
 //Test NegInfInterval's isAfter(Interval).
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -6825,6 +6855,7 @@ private:
 }
 
 //Test NegInfInterval's intersects().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -6922,6 +6953,7 @@ private:
 }
 
 //Test NegInfInterval's intersection().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -7040,6 +7072,7 @@ private:
 }
 
 //Test NegInfInterval's isAdjacent().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -7138,6 +7171,7 @@ private:
 }
 
 //Test NegInfInterval's merge().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -7247,6 +7281,7 @@ private:
 }
 
 //Test NegInfInterval's span().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.datetime.date;
@@ -7523,6 +7558,7 @@ private:
 }
 
 //Test NegInfInterval's bwdRange().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.datetime.date;
@@ -8394,6 +8430,7 @@ private:
 }
 
 //Test IntervalRange's front.
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.datetime.date;
@@ -8438,6 +8475,7 @@ private:
 }
 
 //Test IntervalRange's popFront().
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.datetime.date;

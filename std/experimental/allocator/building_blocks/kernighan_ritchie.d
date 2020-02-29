@@ -639,6 +639,7 @@ allocator if `deallocate` is needed, yet the actual deallocation traffic is
 relatively low. The example below shows a `KRRegion` using stack storage
 fronting the GC allocator.
 */
+version (WebAssembly) {} else // TODO: buffer likely to be too big...
 @system unittest
 {
     import std.experimental.allocator.building_blocks.fallback_allocator
@@ -663,6 +664,7 @@ It should perform slightly better because instead of searching through one
 large free list, it searches through several shorter lists in LRU order. Also,
 it actually returns memory to the operating system when possible.
 */
+version (WebAssembly) {} else // TODO: no mmap_allocator support yet
 @system unittest
 {
     import std.algorithm.comparison : max;
@@ -706,6 +708,7 @@ it actually returns memory to the operating system when possible.
     }
 }
 
+version (WebAssembly) {} else // TODO: no mmap_allocator support yet
 @system unittest
 {
     import std.algorithm.comparison : max;
@@ -821,6 +824,7 @@ it actually returns memory to the operating system when possible.
     assert(p.length == 1024 * 1024);
 }
 
+version (WebAssembly) {} else // TODO: 256 * 1024 might be too big...
 @system unittest
 {
     import std.experimental.allocator.building_blocks;
@@ -863,6 +867,7 @@ it actually returns memory to the operating system when possible.
     test(sizes32);
 }
 
+version (WebAssembly) {} else // TODO: 256 * 1024 might be too big...
 @system unittest
 {
     import std.experimental.allocator.building_blocks;

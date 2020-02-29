@@ -404,6 +404,7 @@ auto castSwitch(choices...)(Object switchObject)
 }
 
 /// Using with void handlers:
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import std.exception : assertThrown;
@@ -425,6 +426,7 @@ auto castSwitch(choices...)(Object switchObject)
     )();
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import core.exception : SwitchError;
@@ -864,6 +866,7 @@ nothrow pure @safe unittest
     assert(result > 0);
 }
 
+version (WebAssembly) {} else // no parallelism in wasm
 nothrow pure @safe unittest
 {
     // Parallelism (was broken by inferred return type "immutable int")
@@ -1834,6 +1837,7 @@ auto predSwitch(alias pred = "a == b", T, R ...)(T switchExpression, lazy R choi
 }
 
 ///
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @safe unittest
 {
     string res = 2.predSwitch!"a < b"(
@@ -1861,6 +1865,7 @@ auto predSwitch(alias pred = "a == b", T, R ...)(T switchExpression, lazy R choi
     assertThrown!Exception(factorial(-9));
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import core.exception : SwitchError;

@@ -149,6 +149,7 @@ class UTFException : UnicodeException
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -427,6 +428,7 @@ if (is(S : const char[]) ||
     });
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest // invalid start bytes
 {
     import std.exception : assertThrown;
@@ -1960,6 +1962,7 @@ version (unittest) private void testAllDecode(R)(R range,
     testDecodeFront(range, expectedChar, expectedIndex, line);
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 version (unittest) private void testBadDecode(R)(R range, size_t index, size_t line = __LINE__)
 {
     import core.exception : AssertError;
@@ -1987,6 +1990,7 @@ version (unittest) private void testBadDecode(R)(R range, size_t index, size_t l
         assertThrown!UTFException(decodeFront(range, index), null, __FILE__, line);
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 version (unittest) private void testBadDecodeBack(R)(R range, size_t line = __LINE__)
 {
     // This condition is to allow unit testing all `decode` functions together
@@ -2013,6 +2017,7 @@ version (unittest) private void testBadDecodeBack(R)(R range, size_t line = __LI
     }
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @system unittest
 {
     import std.conv : to;
@@ -2097,6 +2102,7 @@ version (unittest) private void testBadDecodeBack(R)(R range, size_t line = __LI
     });
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @system unittest
 {
     import std.conv : to;
@@ -2153,6 +2159,7 @@ version (unittest) private void testBadDecodeBack(R)(R range, size_t line = __LI
     });
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @system unittest
 {
     import std.conv : to;
@@ -2235,6 +2242,7 @@ version (unittest) private void testBadDecodeBack(R)(R range, size_t line = __LI
     });
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2309,6 +2317,7 @@ size_t encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -2329,6 +2338,7 @@ size_t encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -2349,6 +2359,7 @@ size_t encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -2366,6 +2377,7 @@ size_t encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
     assert(buf[0] == replacementDchar);
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2423,6 +2435,7 @@ size_t encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
     goto L1;
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2462,6 +2475,7 @@ size_t encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
     return 1;
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2585,6 +2599,7 @@ void encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
     });
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2650,6 +2665,7 @@ void encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
     str = r;
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2688,6 +2704,7 @@ void encode(UseReplacementDchar useReplacementDchar = No.useReplacementDchar)(
     str ~= c;
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception;
@@ -2892,6 +2909,7 @@ if (isSomeString!S)
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -2899,6 +2917,7 @@ if (isSomeString!S)
     assertThrown!UTFException(validate(a));
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest // bugzilla 12923
 {
     import std.exception;
@@ -4397,6 +4416,7 @@ if (isSomeChar!C)
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.algorithm.comparison : equal;

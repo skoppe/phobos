@@ -125,6 +125,7 @@ Distributed under the Boost Software License, Version 1.0.
 */
 module std.xml;
 
+version (WebAssembly) {} else: // module uses too much Exceptions, not supported in wasm right now
 enum cdata = "<![CDATA[";
 
 /**
@@ -513,12 +514,14 @@ string decode(string s, DecodeMode mode=DecodeMode.LOOSE) @safe pure
     assert(decode("&#x2G;",         DecodeMode.LOOSE) == "&#x2G;");
 
     // Assert that things that shouldn't work, don't
+    version (WebAssembly) {} else { // TODO: WASM has no exception support
     assertNot("cat & dog");
     assertNot("a &gt b");
     assertNot("&#;");
     assertNot("&#x;");
     assertNot("&#2G;");
     assertNot("&#x2G;");
+    }
 }
 
 /**
@@ -2748,6 +2751,7 @@ void check(string s) @safe pure
     }
 }
 
+version (WebAssembly) {} else // has no exception support
 @system pure unittest
 {
     import std.string : indexOf;
@@ -2797,6 +2801,7 @@ void check(string s) @safe pure
     }
 }
 
+version (WebAssembly) {} else // has no exception support
 @system unittest
 {
     string s = q"EOS

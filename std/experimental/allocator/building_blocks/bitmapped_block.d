@@ -1205,6 +1205,7 @@ Params:
         Although limited by single block allocations, `No.multiblock` will generally
         provide higher performance.
 */
+      version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 struct BitmappedBlock(size_t theBlockSize, uint theAlignment = platformAlignment,
    ParentAllocator = NullAllocator, Flag!"multiblock" f = Yes.multiblock)
 {
@@ -1386,6 +1387,7 @@ struct BitmappedBlock(size_t theBlockSize, uint theAlignment = platformAlignment
     }
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 ///
 @system unittest
 {
@@ -1399,6 +1401,7 @@ struct BitmappedBlock(size_t theBlockSize, uint theAlignment = platformAlignment
     assert(b.length == 100);
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 ///
 @system unittest
 {
@@ -1430,6 +1433,7 @@ struct BitmappedBlock(size_t theBlockSize, uint theAlignment = platformAlignment
     assert(a.deallocate(buf));
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 ///
 @system unittest
 {
@@ -1460,6 +1464,7 @@ struct BitmappedBlock(size_t theBlockSize, uint theAlignment = platformAlignment
     assert(a.deallocate(buf));
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 // Test instantiation with stateful allocators
 @system unittest
 {
@@ -1640,6 +1645,7 @@ shared struct SharedBitmappedBlock(size_t theBlockSize, uint theAlignment = plat
     }
     else
     {
+        version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
         version (unittest)
         @system unittest
         {
@@ -1661,6 +1667,7 @@ shared struct SharedBitmappedBlock(size_t theBlockSize, uint theAlignment = plat
     }
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet, not ThreadGroup
 ///
 @system unittest
 {
@@ -1722,6 +1729,7 @@ shared struct SharedBitmappedBlock(size_t theBlockSize, uint theAlignment = plat
     testAlloc(alloc2, blockSize);
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     // Test chooseAtRuntime
@@ -1736,6 +1744,7 @@ shared struct SharedBitmappedBlock(size_t theBlockSize, uint theAlignment = plat
     assert(b.length == 100);
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 pure @safe unittest
 {
     import std.typecons : Ternary;
@@ -1749,6 +1758,7 @@ pure @safe unittest
     }();
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @safe unittest
 {
     import std.typecons : Ternary;
@@ -1759,12 +1769,14 @@ pure @safe unittest
     assert(b.length == 100);
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     import std.experimental.allocator.gc_allocator : GCAllocator;
     testAllocator!(() => BitmappedBlock!(64, 8, GCAllocator)(1024 * 64));
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     // Test chooseAtRuntime
@@ -1774,6 +1786,7 @@ pure @safe unittest
     testAllocator!(() => BitmappedBlock!(chooseAtRuntime, 8, GCAllocator, No.multiblock)(1024 * 64, blockSize));
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     import std.experimental.allocator.mallocator : Mallocator;
@@ -1781,6 +1794,7 @@ pure @safe unittest
     testAllocator!(() => SharedBitmappedBlock!(64, 8, Mallocator, No.multiblock)(1024 * 64));
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     // Test chooseAtRuntime
@@ -1790,6 +1804,7 @@ pure @safe unittest
     testAllocator!(() => SharedBitmappedBlock!(chooseAtRuntime, 8, Mallocator, No.multiblock)(1024 * 64, blockSize));
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     static void testAllocateAll(size_t bs, bool isShared = true)(size_t blocks, uint blocksAtATime)
@@ -1961,6 +1976,7 @@ pure @safe unittest
     testAllocateAll!(128 * 20, false)(13 * 128, 128);
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     import std.experimental.allocator.mallocator : Mallocator;
@@ -2041,6 +2057,7 @@ pure @safe unittest
 }
 
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     import std.experimental.allocator.mallocator : Mallocator;
@@ -2111,6 +2128,7 @@ pure @safe unittest
     testAlloc!(SharedBitmappedBlock!(16, 16))();
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 // Test totalAllocation and goodAllocSize
 nothrow @safe @nogc unittest
 {
@@ -2134,6 +2152,7 @@ nothrow @safe @nogc unittest
     assert(h3.totalAllocation(64 * 4096 + 1) >= 65 * 4096);
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 // Test owns
 @system unittest
 {
@@ -2159,6 +2178,7 @@ The time complexity of `resolveInternalPointer` is $(BIGOH k), where `k`
 is the size of the object within which the internal pointer is looked up.
 
 */
+version (WebAssembly) {} else // TODO: BitmappedBlock isn't supported yet
 struct BitmappedBlockWithInternalPointers(
     size_t theBlockSize, uint theAlignment = platformAlignment,
     ParentAllocator = NullAllocator)
@@ -2388,6 +2408,7 @@ struct BitmappedBlockWithInternalPointers(
     }
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     import std.typecons : Ternary;
@@ -2428,12 +2449,14 @@ struct BitmappedBlockWithInternalPointers(
     () nothrow @nogc { h.deallocate(b); }();
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 @system unittest
 {
     auto h = BitmappedBlockWithInternalPointers!(4096)(new ubyte[4096 * 1024]);
     assert((() pure nothrow @safe @nogc => h.goodAllocSize(1))() == 4096);
 }
 
+version (WebAssembly) {} else // TODO: AlignedMallocator isn't supported yet
 // Test instantiation with stateful allocators
 @system unittest
 {

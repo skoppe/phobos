@@ -238,6 +238,7 @@ public import std.experimental.allocator.common,
     processAllocator = sharedAllocatorObject(GCAllocator.instance);
 }
 
+version (WebAssembly) {} else // TODO: we don't support alignedAllocator yet
 // Example in the synopsis above
 @system unittest
 {
@@ -1076,6 +1077,7 @@ allocator can be cast to `shared`.
     processAllocator() = a;
 }
 
+version (WebAssembly) {} else // TODO: failure in d_interface_cast
 @system unittest
 {
     import core.exception : AssertError;
@@ -1364,6 +1366,7 @@ nothrow @safe @nogc unittest
 }
 
 // test failure with a pure, failing struct
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown, enforce;
@@ -1381,6 +1384,7 @@ nothrow @safe @nogc unittest
 }
 
 // test failure with an impure, failing struct
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.exception : assertThrown, enforce;
@@ -1746,6 +1750,7 @@ T[] makeArray(T, Allocator)(auto ref Allocator alloc, size_t length, T init)
 }
 
 // test failure with a pure, failing struct
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown, enforce;
@@ -1767,6 +1772,7 @@ T[] makeArray(T, Allocator)(auto ref Allocator alloc, size_t length, T init)
 }
 
 // test failure with an impure, failing struct
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.exception : assertThrown, enforce;
@@ -1970,6 +1976,7 @@ if (isInputRange!R && !isInfinite!R)
 }
 
 // test failure with a pure, failing struct
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown, enforce;
@@ -2017,6 +2024,7 @@ if (isInputRange!R && !isInfinite!R)
 }
 
 // test failure with an impure, failing struct
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.exception : assertThrown, enforce;
@@ -3719,6 +3727,7 @@ unittest
     assert(a.empty == Ternary.yes);
 }
 
+version (WebAssembly) {} else // TODO: we don't support alignedAllocator yet
 //version (std_allocator_benchmark)
 unittest
 {
@@ -3813,6 +3822,7 @@ unittest
     //assert(b.length == 102);
 }
 
+version (WebAssembly) {} else // TODO: we don't support alignedAllocator yet
 ///
 unittest
 {

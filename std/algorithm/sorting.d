@@ -4722,6 +4722,7 @@ pure @safe unittest
     assert(src == rslt);
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 pure @safe unittest
 {
     import std.exception : assertThrown;

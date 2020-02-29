@@ -698,6 +698,7 @@ version (Posix) @system unittest
     a.deallocateAll();
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.exception : AssertError;
@@ -816,6 +817,7 @@ version (Posix) @system unittest
     a.deallocateAll();
 }
 
+version (WebAssembly) {} else: // no mmap support yet
 @system unittest
 {
     import std.experimental.allocator.building_blocks.ascending_page_allocator : AscendingPageAllocator;
@@ -876,6 +878,7 @@ version (Posix) @system unittest
     assert(a.deallocateAll());
 }
 
+version (WebAssembly) {} else: // no mmap support yet
 @system unittest
 {
     import std.experimental.allocator.building_blocks.ascending_page_allocator : AscendingPageAllocator;
@@ -943,6 +946,7 @@ version (Posix) @system unittest
     assert(a.deallocateAll());
 }
 
+version (WebAssembly) {} else: // no mmap support yet
 @system unittest
 {
     import std.experimental.allocator.building_blocks.ascending_page_allocator : AscendingPageAllocator;
@@ -980,6 +984,7 @@ version (Posix) @system unittest
     assert(a.deallocateAll());
 }
 
+version (WebAssembly) {} else // no mmap support yet
 @system unittest
 {
     import std.experimental.allocator.building_blocks.ascending_page_allocator : AscendingPageAllocator;

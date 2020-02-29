@@ -1239,6 +1239,7 @@ private T tanImpl(T)(T x) @safe pure nothrow @nogc
     return (sign) ? -y : y;
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     static void testTan(T)()
@@ -1338,6 +1339,7 @@ float acos(float x) @safe pure nothrow @nogc  { return acos(cast(real) x); }
     assert(acos(PI).isNaN);
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     assert(equalsDigit(acos(0.5), std.math.PI / 3, useDigits));
@@ -1373,6 +1375,7 @@ float asin(float x) @safe pure nothrow @nogc  { return asin(cast(real) x); }
     assert(asin(PI).isNaN);
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     assert(equalsDigit(asin(0.5), PI / 6, useDigits));
@@ -1567,6 +1570,7 @@ private T atanImpl(T)(T x) @safe pure nothrow @nogc
     return (sign) ? -y : y;
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     static void testAtan(T)()
@@ -1740,6 +1744,7 @@ private T atan2Impl(T)(T y, T x) @safe pure nothrow @nogc
     return z;
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     static void testAtan2(T)()
@@ -1844,6 +1849,7 @@ float cosh(float x) @safe pure nothrow @nogc  { return cosh(cast(real) x); }
     assert(cosh(1.0).approxEqual((E + 1.0 / E) / 2));
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     assert(equalsDigit(cosh(1.0), (E + 1.0 / E) / 2, useDigits));
@@ -1886,6 +1892,7 @@ float sinh(float x) @safe pure nothrow @nogc  { return sinh(cast(real) x); }
     assert(sinh(1.0).approxEqual((E - 1.0 / E) / 2));
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     assert(equalsDigit(sinh(1.0), (E - 1.0 / E) / 2, useDigits));
@@ -1925,6 +1932,7 @@ float tanh(float x) @safe pure nothrow @nogc { return tanh(cast(real) x); }
     assert(tanh(1.0).approxEqual(sinh(1.0) / cosh(1.0)));
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     assert(equalsDigit(tanh(1.0), sinh(1.0) / cosh(1.0), 15));
@@ -2003,6 +2011,7 @@ float acosh(float x) @safe pure nothrow @nogc  { return acosh(cast(real) x); }
     assert(isNaN(acosh(0.5)));
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     assert(equalsDigit(acosh(cosh(3.0)), 3, useDigits));
@@ -2049,6 +2058,7 @@ float asinh(float x) @safe pure nothrow @nogc { return asinh(cast(real) x); }
     assert(isNaN(asinh(real.nan)));
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe unittest
 {
     assert(equalsDigit(asinh(sinh(3.0)), 3, useDigits));
@@ -2094,6 +2104,7 @@ float atanh(float x) @safe pure nothrow @nogc { return atanh(cast(real) x); }
     assert(atanh(0.0) == 0);
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe unittest
 {
     assert(equalsDigit(atanh(tanh(0.5L)), 0.5, useDigits));
@@ -2439,6 +2450,7 @@ private T expImpl(T)(T x) @safe pure nothrow @nogc
     return x;
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     version (FloatingPointControlSupport)
@@ -3675,6 +3687,7 @@ if (isFloatingPoint!T)
     assert(frexp(0.0, exp) == 0.0 && exp == 0);
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     int exp;
@@ -4158,6 +4171,7 @@ float ldexp(float n, int exp) @safe pure nothrow @nogc { return ldexp(cast(real)
 }
 */
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     static real[3][] vals =    // value,exp,ldexp
@@ -4651,6 +4665,7 @@ real log2(real x) @safe pure nothrow @nogc
     assert(approxEqual(log2(1024.0L), 10));
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     // check if values are equal to 19 decimal digits of precision
@@ -5958,6 +5973,9 @@ private:
     // The RISC-V (32 & 64 bit) fcsr is 32-bit register.
     uint flags;
 
+    version (IeeeFlagsSupport)
+    {
+
     version (CRuntime_Microsoft)
     {
         // Microsoft uses hardware-incompatible custom constants in fenv.h (core.stdc.fenv).
@@ -5986,6 +6004,7 @@ private:
             INVALID_MASK    = core.stdc.fenv.FE_INVALID,
             EXCEPTIONS_MASK = core.stdc.fenv.FE_ALL_EXCEPT,
         }
+    }
     }
 
 private:
@@ -6581,6 +6600,11 @@ nothrow @nogc:
                                  | inexactException | subnormalException,
         }
     }
+ else version (WebAssembly) {
+     enum : ExceptionMask {
+         allExceptions = 0
+     }
+ }
     else
         static assert(false, "Not implemented for this architecture");
 
@@ -6709,6 +6733,10 @@ private:
     {
         alias ControlState = ushort;
     }
+    else version (WebAssembly)
+    {
+        alias ControlState = uint;
+    }
     else
         static assert(false, "Not implemented for this architecture");
 
@@ -6798,6 +6826,8 @@ private:
             {
                 cont = __asm!ControlState("vmrs $0, FPSCR", "=r");
             }
+            else version (WebAssembly)
+                cont = 0;
             else
                 assert(0, "Not yet supported");
 
@@ -8529,6 +8559,7 @@ if (isFloatingPoint!(F) && isIntegral!(G))
     assert(feqrel(pow(x, neg3),  1 / (x * x * x)) >= real.mant_dig - 1);
 }
 
+version (WebAssembly) {} else // equalsDigit uses printf with long-double, which isn't supported. add -lc-printscan-long-double to enable it
 @safe @nogc nothrow unittest
 {
     assert(equalsDigit(pow(2.0L, 10.0L), 1024, 19));

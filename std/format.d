@@ -83,6 +83,7 @@ class FormatException : Exception
 }
 
 ///
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -917,6 +918,7 @@ uint formattedRead(R, Char, S...)(auto ref R r, const(Char)[] fmt, auto ref S ar
     assert(s4 == ["hello", "world"]);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system pure unittest
 {
     string line;
@@ -935,6 +937,7 @@ uint formattedRead(R, Char, S...)(auto ref R r, const(Char)[] fmt, auto ref S ar
     assertThrown(formattedRead(line, "%s", &sa3));
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system pure unittest
 {
     string input;
@@ -1640,6 +1643,7 @@ if (is(Unqual!Char == Char))
     }
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest
 {
     import std.array;
@@ -1714,6 +1718,7 @@ if (is(Unqual!Char == Char))
 }
 
 // Issue 14059
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest
 {
     import std.array : appender;
@@ -1809,6 +1814,7 @@ FormatSpec!Char singleSpec(Char)(Char[] fmt)
 }
 
 ///
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -2217,6 +2223,7 @@ if (is(Unqual!T == typeof(null)) && !is(T == enum) && !hasToString!(T, Char))
     writeAligned(w, "null", f);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe pure unittest
 {
     assert(collectExceptionMsg!FormatException(format("%p", null)).back == 'p');
@@ -2460,6 +2467,7 @@ private void formatUnsigned(Writer, T, Char)
     assert("%12,d".format(0) == "           0");
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe pure unittest
 {
     assert(collectExceptionMsg!FormatException(format("%c", 5)).back == 'c');
@@ -2833,6 +2841,7 @@ useSnprintf:
     assert(format("%#,3.0f", 1303.1982) == "1,303.");
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe /*pure*/ unittest     // formatting floating point values is now impure
 {
     import std.conv : to;
@@ -3592,6 +3601,7 @@ if (isInputRange!T)
     assert(format("%-(%1$s - %1$s, %)", ["A", "B", "C"]) == "A - A, B - B, C - C");
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe pure unittest
 {
     assert(collectExceptionMsg(format("%d", "hi")).back == 'd');
@@ -3806,6 +3816,7 @@ if (is(AssocArrayTypeOf!T) && !is(T == enum) && !hasToString!(T, Char))
         put(w, f.seqAfter);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest
 {
     assert(collectExceptionMsg!FormatException(format("%d", [0:1])).back == 'd');
@@ -4067,6 +4078,7 @@ void enforceValidFormatSpec(T, Char)(scope const ref FormatSpec!Char f)
     }
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     static interface IF1 { }
@@ -4767,6 +4779,7 @@ if (isSIMDVector!V)
     format("%s", &i);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system pure unittest
 {
     // Test for issue 11778
@@ -4843,6 +4856,7 @@ private T getNth(string kind, alias Condition, T, A...)(uint index, A args)
     }
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest
 {
     // width/precision
@@ -4981,6 +4995,7 @@ private void formatTest(T)(string fmt, T val, string[] expected, size_t ln = __L
         && w.data[2] == 3 && w.data[3] == 2);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe pure unittest
 {
     // testing positional parameters
@@ -5002,6 +5017,7 @@ private void formatTest(T)(string fmt, T val, string[] expected, size_t ln = __L
     assert(w.data == "2345", w.data);
 }
 
+version (WebAssembly) {} else // long-double printing isn't supported. add -lc-printscan-long-double to enable it
 @safe unittest
 {
     import core.stdc.string : strlen;
@@ -5329,6 +5345,7 @@ here:
     assert(stream.data == "7", ">" ~ stream.data ~ "<");
 }
 
+version (WebAssembly) {} else // long-double printing isn't supported. add -lc-printscan-long-double to enable it
 @safe unittest
 {
     import std.array;
@@ -6154,6 +6171,7 @@ deprecated
         assert(s == "1.2+3.4i", s);
 }
 
+version (WebAssembly) {} else // long-double printing isn't supported. add -lc-printscan-long-double to enable it
 @system unittest
 {
     import std.conv : octal;
@@ -6685,6 +6703,7 @@ if (isSomeChar!Char)
     return w.data;
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe pure unittest
 {
     import core.exception;
@@ -6805,6 +6824,7 @@ char[] sformat(Char, Args...)(return scope char[] buf, scope const(Char)[] fmt, 
     assert(sformat(buf[], "%s foo", "bar") == "bar foo");
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     import core.exception;

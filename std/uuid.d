@@ -400,6 +400,7 @@ public struct UUID
             //here parsing is done at compile time, no runtime overhead!
         }
 
+    version (WebAssembly) {} else // exceptions are supported in WASM
         @safe pure unittest
         {
             import std.conv : to;
@@ -1499,6 +1500,7 @@ if (isInputRange!Range
     //here parsing is done at compile time, no runtime overhead!
 }
 
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe pure unittest
 {
     import std.conv : to;
@@ -1736,6 +1738,7 @@ public class UUIDParsingException : Exception
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @safe unittest
 {
     import std.exception : collectException;

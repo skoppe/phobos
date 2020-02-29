@@ -167,6 +167,8 @@
  */
 module std.traits;
 
+version (WebAssembly) version = WASI_libc; // Always use the WASI libc for translating libc calls to wasi, see https://github.com/CraneStation/wasi-libc
+
 import std.meta : AliasSeq, allSatisfy, anySatisfy;
 import std.functional : unaryFun;
 
@@ -524,6 +526,7 @@ template packageName(alias T)
     import core.sync.barrier;  // local import
     static assert(packageName!core == "core");
     static assert(packageName!(core.sync) == "core.sync");
+    version (WASI_libc) {} else
     static assert(packageName!Barrier == "core.sync");
 
     struct X12287(T) { T i; }
@@ -601,6 +604,7 @@ template moduleName(alias T)
     import core.sync.barrier;  // local import
     static assert(!__traits(compiles, moduleName!(core.sync)));
     static assert(moduleName!(core.sync.barrier) == "core.sync.barrier");
+    version (WASI_libc) {} else
     static assert(moduleName!Barrier == "core.sync.barrier");
 
     struct X12287(T) { T i; }
@@ -761,6 +765,7 @@ private template fqnSym(alias T)
                                                 == prefix ~ "Test12309!(int, 10, \"str\")");
 
     import core.sync.barrier;
+    version (WASI_libc) {} else
     static assert(fqn!Barrier == "core.sync.barrier.Barrier");
 }
 
@@ -2451,8 +2456,12 @@ if (is(T == function))
 
     int f()
     {
-        import core.thread : getpid;
-        return getpid();
+        version (WASI_libc) {
+            return 42;
+        } else {
+            import core.thread : getpid;
+            return getpid();
+        }
     }
 
     int g() pure @trusted

@@ -1329,6 +1329,7 @@ if (distinctFieldNames!(Specs))
         }
 
         ///
+        version (WebAssembly) {} else // exceptions are not supported in wasm
         static if (Types.length == 0)
         @safe unittest
         {
@@ -1618,6 +1619,7 @@ private template ReverseTupleSpecs(T...)
         auto c = Tuple!(int, "a", double, "b")(a);
         assert(c[0] == 1 && c[1] == 2);
     }
+    version (WebAssembly) {} else // real to string not supported in WASM
     {
         Tuple!(int, real) nosh;
         nosh[0] = 5;
@@ -2537,6 +2539,7 @@ if (is(T == class) || is(T == interface))
     }
 }
 
+version (WebAssembly) {} else // no threads yet
 ///
 @system unittest
 {
@@ -2961,6 +2964,7 @@ Returns:
     }
 
 //@@@DEPRECATED_2.096@@@
+version (WebAssembly) {} else // exceptions are not supported in wasm
 deprecated(
     "Implicit conversion with `alias Nullable.get this` will be removed after 2.096. Please use `.get` explicitly.")
 @system unittest
@@ -3048,6 +3052,7 @@ auto nullable(T)(T t)
 }
 
 ///
+version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import std.exception : assertThrown;
@@ -3062,6 +3067,7 @@ auto nullable(T)(T t)
 }
 
 //@@@DEPRECATED_2.096@@@
+version (WebAssembly) {} else // exceptions are not supported in wasm
 deprecated(
     "Implicit conversion with `alias Nullable.get this` will be removed after 2.096. Please use `.get` explicitly.")
 @system unittest
@@ -3106,6 +3112,7 @@ deprecated(
     a.nullify();
     assert(f(a) == 42);
 }
+version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import std.exception : assertThrown;
@@ -3685,6 +3692,7 @@ Returns:
     }
 
 ///
+    version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import std.exception : assertThrown, assertNotThrown;
@@ -3744,6 +3752,7 @@ if (is (typeof(nullValue) == T))
 }
 
 ///
+version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import std.exception : assertThrown;
@@ -4108,6 +4117,7 @@ Params:
     }
 
     ///
+    version (WebAssembly) {} else // exceptions are not supported in wasm
     @system unittest
     {
         import std.exception : assertThrown, assertNotThrown;
@@ -4134,6 +4144,7 @@ This function is also called for the implicit conversion to `T`.
     }
 
     ///
+    version (WebAssembly) {} else // exceptions are not supported in wasm
     @system unittest
     {
         import std.exception : assertThrown, assertNotThrown;
@@ -4161,6 +4172,7 @@ auto nullableRef(T)(T* t)
 }
 
 ///
+version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import std.exception : assertThrown;
@@ -4395,6 +4407,7 @@ See_Also:
 alias WhiteHole(Base) = AutoImplement!(Base, generateAssertTrap, isAbstractFunction);
 
 ///
+version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import std.exception : assertThrown;
@@ -4417,6 +4430,7 @@ class NotImplementedError : Error
     }
 }
 
+version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import std.exception : assertThrown;
@@ -4555,6 +4569,7 @@ if (is(Interface == interface) && is(BaseClass == class))
 }
 
 ///
+version (WebAssembly) {} else // exceptions are supported in WASM
 @system unittest
 {
     interface PackageSupplier
@@ -5358,6 +5373,7 @@ template generateAssertTrap(C, func...)
 }
 
 ///
+version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import std.exception : assertThrown;
@@ -6145,6 +6161,7 @@ enum RefCountedAutoInitialize
 }
 
 ///
+version (WebAssembly) {} else // exceptions are not supported in wasm
 @system unittest
 {
     import core.exception : AssertError;

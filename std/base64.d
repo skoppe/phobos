@@ -1754,12 +1754,14 @@ class Base64Exception : Exception
 }
 
 ///
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @safe unittest
 {
     import std.exception : assertThrown;
     assertThrown!Base64Exception(Base64.decode("ab|c"));
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @system unittest
 {
     import std.algorithm.comparison : equal;

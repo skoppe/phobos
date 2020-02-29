@@ -84,6 +84,8 @@ Macros:
 */
 module std.process;
 
+version (WebAssembly) {} else:
+
 version (Posix)
 {
     import core.sys.posix.sys.wait;
@@ -2695,6 +2697,7 @@ version (Windows) private immutable string shellSwitch = "/C";
 {
     version (Windows)    return GetCurrentProcessId();
     else version (Posix) return core.sys.posix.unistd.getpid();
+    else version (WASI_libc) return core.sys.wasi.unistd.getpid();
 }
 
 
@@ -2710,6 +2713,7 @@ version (Windows) private immutable string shellSwitch = "/C";
  * writefln("Current thread ID: %s", thisThreadID);
  * ---
  */
+version (WebAssembly) {} else
 @property ThreadID thisThreadID() @trusted nothrow //TODO: @safe
 {
     version (Windows)
@@ -4109,5 +4113,6 @@ else version (Posix)
             free(cast(void*) browser);
     }
 }
+ else version (WebAssembly) {}
 else
     static assert(0, "os not supported");

@@ -43,6 +43,7 @@ $(TR $(TD Other) $(TD
 module std.exception;
 
 /// Synopis
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.stdc.stdlib : malloc, free;
@@ -155,6 +156,7 @@ auto assertNotThrown(T : Throwable = Exception, E)
     }
 }
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.exception : AssertError;
@@ -169,6 +171,7 @@ auto assertNotThrown(T : Throwable = Exception, E)
                enforce!StringException(false, "Error!"))) ==
            `assertNotThrown failed: StringException was thrown: Error!`);
 }
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.exception : AssertError;
@@ -186,6 +189,7 @@ auto assertNotThrown(T : Throwable = Exception, E)
            `assertNotThrown failed: StringException was thrown.`);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.exception : AssertError;
@@ -298,6 +302,7 @@ void assertThrown(T : Throwable = Exception, E)
                           file, line);
 }
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.exception : AssertError;
@@ -313,6 +318,7 @@ void assertThrown(T : Throwable = Exception, E)
            `assertThrown failed: No StringException was thrown.`);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.exception : AssertError;
@@ -476,6 +482,7 @@ T enforce(T)(T value, lazy Throwable ex)
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     assertNotThrown(enforce(true, new Exception("this should not be thrown")));
@@ -483,6 +490,7 @@ T enforce(T)(T value, lazy Throwable ex)
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     assert(enforce(123) == 123);
@@ -501,6 +509,7 @@ T enforce(T)(T value, lazy Throwable ex)
 }
 
 /// Alias your own enforce function
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.conv : ConvException;
@@ -627,6 +636,7 @@ private void bailOut(E : Throwable = Exception)(string file, size_t line, scope 
 alias errnoEnforce = enforce!ErrnoException;
 
 ///
+version (WebAssembly) {} else // TODO: directory not openend
 @system unittest
 {
     import core.stdc.stdio : fclose, fgets, fopen;
@@ -678,6 +688,7 @@ if (is(typeof(new E(string.init, size_t.init))) && !is(typeof(new E("", string.i
     }
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 deprecated
 @system unittest
 {
@@ -723,6 +734,7 @@ deprecated
 }
 
 deprecated
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     alias enf = enforceEx!Exception;
@@ -760,6 +772,7 @@ T collectException(T = Exception, E)(lazy E expression, ref E result)
     return null;
 }
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     int b;
@@ -801,6 +814,7 @@ T collectException(T : Throwable = Exception, E)(lazy E expression)
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     int foo() { throw new Exception("blah"); }
@@ -839,6 +853,7 @@ string collectExceptionMsg(T = Exception, E)(lazy E expression)
         return e.msg.empty ? emptyExceptionMsg : e.msg;
 }
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     void throwFunc() { throw new Exception("My Message."); }
@@ -1070,6 +1085,7 @@ T assumeWontThrow(T)(lazy T expr,
     assert(computeLength(3, 4) == 5);
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.exception : AssertError;
@@ -1615,7 +1631,7 @@ class ErrnoException : Exception
     final @property uint errno() nothrow pure @nogc @safe { return _errno; }
     private uint _errno;
     /// Constructor which takes an error message. The current global $(REF errno, core,stdc,errno) value is used as error code.
-    this(string msg, string file = null, size_t line = 0) @safe
+    this(string msg, string file = null, size_t line = 0) @trusted // TODO: trusted because of WASM, errno probably needs to be @trusted or @safe itself
     {
         import core.stdc.errno : errno;
         this(msg, errno, file, line);
@@ -1730,6 +1746,7 @@ CommonType!(T1, T2) ifThrown(T1, T2)(lazy scope T1 expression, scope T2 delegate
 }
 
 /// Revert to a default value upon an error:
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.conv : to;
@@ -1740,6 +1757,7 @@ CommonType!(T1, T2) ifThrown(T1, T2)(lazy scope T1 expression, scope T2 delegate
 Chain multiple calls to ifThrown, each capturing errors from the
 entire preceding expression.
 */
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.conv : ConvException, to;
@@ -1764,6 +1782,7 @@ The expression and the errorHandler must have a common type they can both
 be implicitly casted to, and that type will be the type of the compound
 expression.
 */
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     // null and new Object have a common type(Object).
@@ -1776,6 +1795,7 @@ expression.
 }
 
 /// Use a lambda to get the thrown object.
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.format : format;
@@ -1783,6 +1803,7 @@ expression.
 }
 
 //Verify Examples
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import std.conv;
@@ -1815,6 +1836,7 @@ expression.
     assert("%s".format().ifThrown(e => e.classinfo.name) == "std.format.FormatException");
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 @system unittest
 {
     import core.exception;
@@ -1886,6 +1908,7 @@ enum RangePrimitive
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 pure @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -1904,6 +1927,7 @@ pure @safe unittest
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 pure @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -2179,6 +2203,7 @@ if (isInputRange!Range)
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 pure @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -2197,6 +2222,7 @@ pure @safe unittest
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 pure @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -2212,6 +2238,7 @@ pure @safe unittest
     assert(handled.retro.equal("dlrow olleh")); // as well as `back`
 }
 
+version (WebAssembly) {} else // exceptions not supported in WASM
 pure nothrow @safe unittest
 {
     static struct ThrowingRange
@@ -2403,6 +2430,7 @@ mixin template basicExceptionCtors()
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     class MeaCulpa: Exception

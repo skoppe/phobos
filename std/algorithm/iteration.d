@@ -2269,6 +2269,7 @@ version (none) // this example requires support for non-equivalence relations
     }
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 /*FIXME: pure @safe nothrow*/ @system unittest
 {
     import std.algorithm.comparison : equal;
@@ -3867,6 +3868,7 @@ The number of seeds must be correspondingly increased.
     assert(rep[2 .. $] == "1, 2, 3, 4, 5", "["~rep[2 .. $]~"]");
 }
 
+version (WebAssembly) {} else // WASM has no support for exceptions yet
 @safe unittest
 {
     import std.algorithm.comparison : max, min;

@@ -283,6 +283,7 @@ public:
         _timeStart = TickDuration.currSystemTick;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @nogc @system unittest
     {
         StopWatch sw;
@@ -309,6 +310,7 @@ public:
         _timeMeasured += TickDuration.currSystemTick - _timeStart;
     }
 
+    version (WebAssembly) {} else // exceptions not supported in WASM
     @nogc @system unittest
     {
         StopWatch sw;

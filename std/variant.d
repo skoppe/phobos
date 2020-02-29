@@ -1292,6 +1292,7 @@ public:
     assert(v != elements);
 }
 
+version (WebAssembly) {} else // no exception support yet
 @system unittest
 {
     import std.exception : assertThrown;
@@ -1721,6 +1722,7 @@ static class VariantException : Exception
 }
 
 ///
+version (WebAssembly) {} else // WASM has no exception support yet
 @system unittest
 {
     import std.exception : assertThrown;
@@ -1763,6 +1765,7 @@ static class VariantException : Exception
      //writeln(v1);
 }
 
+version (WebAssembly) {} else // WASM has no exception support yet
 @system unittest
 {
     import std.conv : ConvException;
@@ -2157,6 +2160,7 @@ deprecated
 }
 
 // Ordering comparisons of incompatible types, e.g. issue 7990.
+version (WebAssembly) {} else // WASM has no exception support yet
 @system unittest
 {
     import std.exception : assertThrown;
@@ -2169,6 +2173,7 @@ deprecated
 }
 
 // Handling of unordered types, e.g. issue 9043.
+version (WebAssembly) {} else // WASM has no exception support yet
 @system unittest
 {
     import std.exception : assertThrown;
@@ -2454,6 +2459,7 @@ if (Handlers.length > 0)
     assert(which == -100);
 }
 
+version (WebAssembly) {} else // WASM has no exception support yet
 @system unittest
 {
     import std.exception : assertThrown;
@@ -2671,6 +2677,7 @@ if (isAlgebraic!VariantType && Handler.length > 0)
     v2 = v1;  // AssertError: target must be non-null
     assert(v1 == v2);
 }
+version (WebAssembly) {} else // WASM has no exception support yet
 @system unittest
 {
     import std.exception : assertThrown;
@@ -2934,6 +2941,7 @@ if (isAlgebraic!VariantType && Handler.length > 0)
     var = C(B());
 }
 
+version (WebAssembly) {} else // WASM has no exception support yet
 @system unittest
 {
     import std.exception : assertThrown, assertNotThrown;

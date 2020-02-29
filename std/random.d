@@ -1110,6 +1110,7 @@ alias Mt19937_64 = MersenneTwisterEngine!(ulong, 64, 312, 156, 31,
     assert(gen.front == 15956361063660440239uL);
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     import std.algorithm;
@@ -1669,11 +1670,13 @@ else
             x = (x ^ (x >>> 47)) * m;
             result = (result ^ x) * m;
         }
-        import core.thread : getpid, Thread;
-        import core.time : MonoTime;
+        version (WebAssembly) {} else {
+            import core.thread : getpid, Thread;
 
-        updateResult(cast(ulong) cast(void*) Thread.getThis());
-        updateResult(cast(ulong) getpid());
+            updateResult(cast(ulong) cast(void*) Thread.getThis());
+            updateResult(cast(ulong) getpid());
+        }
+        import core.time : MonoTime;
         updateResult(cast(ulong) MonoTime.currTime.ticks);
         result = (result ^ (result >>> 47)) * m;
         return result ^ (result >>> 47);
@@ -3767,6 +3770,7 @@ if (isInputRange!Range && hasLength!Range && isUniformRNG!UniformRNG)
     assert(10.iota.randomSample(3, rnd).equal([7, 8, 9]));
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @system unittest
 {
     // @system because it takes the address of a local

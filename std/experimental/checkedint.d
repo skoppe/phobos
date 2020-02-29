@@ -244,6 +244,7 @@ import std.traits : isFloatingPoint, isIntegral, isNumeric, isUnsigned, Unqual;
 }
 
 /// `Throw` fails every incorrect operation by throwing an exception
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -1421,6 +1422,7 @@ struct Throw
 }
 
 ///
+version (WebAssembly) {} else // exceptions not supported in WASM
 @safe unittest
 {
     void test(T)()

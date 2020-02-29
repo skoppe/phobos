@@ -706,6 +706,7 @@ pure @safe nothrow @nogc unittest
     assert(equal(testArr[].stride(2), result));
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 debug pure nothrow @system unittest
 {//check the contract
     int[4] testArr = [1,2,3,4];
@@ -2957,6 +2958,7 @@ pure @safe nothrow @nogc unittest
 }
 
 // Test that asserts trigger correctly
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @system unittest
 {
     import std.exception : assertThrown;
@@ -4302,6 +4304,7 @@ if (isStaticArray!R)
 }
 
 // Issue 13390
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @system unittest
 {
     import core.exception : AssertError;
@@ -4825,6 +4828,7 @@ enum StoppingPolicy
 }
 
 ///
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 pure @safe unittest
 {
     import std.algorithm.comparison : equal;
@@ -5159,6 +5163,7 @@ if (Ranges.length && allSatisfy!(isInputRange, Ranges))
     }
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 pure @system unittest
 {
     import std.algorithm.comparison : equal;
@@ -5320,6 +5325,7 @@ nothrow pure @safe unittest
 }
 
 // Text for Issue 11196
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe pure unittest
 {
     import std.exception : assertThrown;
@@ -5666,6 +5672,7 @@ if (allSatisfy!(isInputRange, Ranges))
     }
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @system unittest
 {
     import std.algorithm.iteration : filter;
@@ -6506,6 +6513,7 @@ pure nothrow @nogc @safe unittest
     assert(iota(ssize_t.max, ssize_t.min, -3).length == size_t.max / 3);
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 debug @system unittest
 {//check the contracts
     import core.exception : AssertError;
@@ -6850,6 +6858,7 @@ enum TransverseOptions
 }
 
 ///
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe pure unittest
 {
     import std.algorithm.comparison : equal;
@@ -7643,6 +7652,7 @@ private:
     assert(!is(typeof(z[0][0])));
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -10463,6 +10473,7 @@ pure @safe unittest
     }}
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 version (none) // @@@BUG@@@ 10939
 {
     // Re-enable (or remove) if 10939 is resolved.
@@ -11176,6 +11187,7 @@ that break its sorted-ness, `SortedRange` will work erratically.
     assert(!r.contains(42));  // passes although it shouldn't
 }
 
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @safe unittest
 {
     import std.exception : assertThrown, assertNotThrown;
@@ -11291,6 +11303,7 @@ that break its sorted-ness, `SortedRange` will work erratically.
 }
 
 // Test on an input range
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @system unittest
 {
     import std.conv : text;
@@ -12639,6 +12652,7 @@ if (isInputRange!R && isIntegral!(ElementType!R))
 }
 
 // Test opIndex and opSlice
+version (WebAssembly) {} else // no support for exceptions in WASM yet
 @system unittest
 {
     import std.meta : AliasSeq;

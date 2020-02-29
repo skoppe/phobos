@@ -251,6 +251,7 @@ struct JSONValue
         return v;
     }
     ///
+    version (WebAssembly) {} else // exceptions aren't supported in WASM
     @safe unittest
     {
         JSONValue j = true;
@@ -417,6 +418,7 @@ struct JSONValue
         return object;
     }
     ///
+    version (WebAssembly) {} else // exceptions aren't supported in WASM
     @safe unittest
     {
         import std.exception;
@@ -1707,6 +1709,7 @@ class JSONException : Exception
 }
 
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     import std.exception;
@@ -1987,6 +1990,7 @@ class JSONException : Exception
     assert(jv[3].integer == 2);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest
 {
     auto s = q"EOF
@@ -2005,6 +2009,7 @@ EOF";
 }
 
 // handling of special float values (NaN, Inf, -Inf)
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest
 {
     import std.exception : assertThrown;
@@ -2108,6 +2113,7 @@ pure nothrow @safe unittest // issue 15884
     assert(test(3*minSub));
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest // issue 17555
 {
     import std.exception : assertThrown;
@@ -2156,6 +2162,7 @@ pure nothrow @safe unittest // issue 15884
     assert(parseJSON(`"\/"`).toString(JSONOptions.doNotEscapeSlashes) == `"/"`);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @safe unittest // JSONOptions.strictParsing (issue 16639)
 {
     import std.exception : assertThrown;
@@ -2225,6 +2232,7 @@ pure nothrow @safe unittest // issue 15884
     assert(parseJSON("123 \t\r\n", JSONOptions.strictParsing).integer == 123);
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     import std.algorithm.iteration : map;
@@ -2238,6 +2246,7 @@ pure nothrow @safe unittest // issue 15884
     assertThrown(parseJSON(s, -1, JSONOptions.strictParsing));
 }
 
+version (WebAssembly) {} else // exceptions aren't supported in WASM
 @system unittest
 {
     import std.algorithm.iteration : map;

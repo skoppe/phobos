@@ -393,6 +393,7 @@ struct TypedAllocator(PrimaryAllocator, Policies...)
     }
 }
 
+version (WebAssembly) {} else // TODO: mmap_allocator not supported yet
 ///
 @system unittest
 {

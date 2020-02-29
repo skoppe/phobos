@@ -22,6 +22,8 @@ import std.range.primitives : ElementEncodingType, empty, front,
 import std.traits : isSomeChar, isSomeString, Unqual, isPointer;
 import std.typecons : Flag, No, Yes;
 
+version (WebAssembly) version = WASI_libc; // Always use the WASI libc for translating libc calls to wasi, see https://github.com/CraneStation/wasi-libc
+
 /++
 If flag `KeepTerminator` is set to `KeepTerminator.yes`, then the delimiter
 is included in the strings returned.
@@ -44,6 +46,11 @@ version (LDC)
     {
         version = MINGW_IO;
         version = NO_GETDELIM;
+    }
+    else version (WASI_libc)
+    {
+        version = GENERIC_IO;
+        version = HAS_GETDELIM;
     }
 }
 
@@ -105,6 +112,10 @@ else version (Posix)
 {
     private alias FSChar = char;
 }
+ else version (WASI_libc)
+   {
+     private alias FSChar = char;
+   }
 else
     static assert(0);
 
@@ -306,10 +317,16 @@ else version (GENERIC_IO)
     nothrow:
     @nogc:
 
-    extern (C)
-    {
-        void flockfile(FILE*);
-        void funlockfile(FILE*);
+        extern (C)
+        {
+            version (WASI_libc) {
+                // TODO: wasm has no flockfile/funlockfile, find a better workaround
+                void flockfile(FILE*) {}
+                void funlockfile(FILE*) {}
+            } else {
+                void flockfile(FILE*);
+                void funlockfile(FILE*);
+            }
     }
 
     int fputc_unlocked(int c, _iobuf* fp) { return fputc(c, cast(shared) fp); }
@@ -544,6 +561,7 @@ Throws: `ErrnoException` if the file could not be opened.
         this(name.to!string, mode.to!string);
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @safe unittest
     {
         static import std.file;
@@ -723,6 +741,7 @@ Throws: `ErrnoException` in case of error.
             _name = name;
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest // Test changing filename
     {
         import std.exception : assertThrown, assertNotThrown;
@@ -745,6 +764,7 @@ Throws: `ErrnoException` in case of error.
 
     version (CRuntime_DigitalMars) {} else // Not implemented
     version (CRuntime_Microsoft) {} else // Not implemented
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest // Test changing mode
     {
         import std.exception : assertThrown, assertNotThrown;
@@ -821,6 +841,11 @@ Throws: `ErrnoException` in case of error.
                 import core.sys.posix.stdio : fdopen;
                 auto fp = fdopen(fd, modez);
             }
+            else version (WebAssembly)
+                {
+                    import core.sys.wasi.stdio : fdopen;
+                    auto fp = fdopen(fd, modez);
+                }
             errnoEnforce(fp);
         }
         this = File(fp, name);
@@ -912,6 +937,7 @@ the file handle.
         return !isOpen || .ferror(cast(FILE*) _p.handle);
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @safe unittest
     {
         // Issue 12349
@@ -943,6 +969,7 @@ Throws: `ErrnoException` on failure if closing the file.
         }
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @safe unittest
     {
         static import std.file;
@@ -1014,6 +1041,7 @@ Throws: `Exception` if the file is not opened or if the call to `fflush` fails.
         errnoEnforce(.fflush(_p.handle) == 0);
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @safe unittest
     {
         // Issue 12349
@@ -1053,7 +1081,10 @@ Throws: `Exception` if the file is not opened or if the OS call fails.
         }
         else
         {
-            import core.sys.posix.unistd : fsync;
+            version (WASI_libc)
+                import core.sys.wasi.unistd : fsync;
+            else
+                import core.sys.posix.unistd : fsync;
             import std.exception : errnoEnforce;
             errnoEnforce(fsync(fileno) == 0, "fsync failed");
         }
@@ -1105,6 +1136,7 @@ Throws: `Exception` if `buffer` is empty.
     }
 
     ///
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -1160,6 +1192,7 @@ Throws: `ErrnoException` if the file is not opened or if the call to `fwrite` fa
     }
 
     ///
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -1222,10 +1255,16 @@ Throws: `Exception` if the file is not opened.
             import core.sys.posix.stdio : fseeko, off_t;
             alias fseekFun = fseeko;
         }
+        else version (WASI_libc)
+            {
+                import core.sys.wasi.stdio : fseeko, off_t;
+                alias fseekFun = fseeko;
+            }
         errnoEnforce(fseekFun(_p.handle, to!off_t(offset), origin) == 0,
                 "Could not seek in file `"~_name~"'");
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         import std.conv : text;
@@ -1281,12 +1320,18 @@ Throws: `Exception` if the file is not opened.
             import core.sys.posix.stdio : ftello;
             immutable result = ftello(cast(FILE*) _p.handle);
         }
+        else version (WASI_libc)
+            {
+                import core.sys.wasi.stdio : ftello;
+                immutable result = ftello(cast(FILE*) _p.handle);
+            }
         errnoEnforce(result != -1,
                 "Query ftell() failed for file `"~_name~"'");
         return result;
     }
 
     ///
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         import std.conv : text;
@@ -1398,6 +1443,26 @@ Throws: `Exception` if the file is not opened.
             return fcntl(fileno, operation, &fl);
         }
     }
+    else
+        version (WASI_libc)
+            {
+                private int lockImpl(int operation, short l_type,
+                                     ulong start, ulong length)
+                {
+                    import core.sys.wasi.fcntl : fcntl, flock, off_t;
+                    import core.sys.wasi.unistd : getpid;
+                    import std.conv : to;
+
+                    flock fl = void;
+                    fl.l_type   = l_type;
+                    fl.l_whence = SEEK_SET;
+                    fl.l_start  = to!off_t(start);
+                    fl.l_len    = to!off_t(length);
+                    fl.l_pid    = getpid();
+                    return fcntl(fileno, operation, &fl);
+                }
+            }
+
 
 /**
 Locks the specified file segment. If the file segment is already locked
@@ -1428,6 +1493,16 @@ $(UL
             errnoEnforce(lockImpl(F_SETLKW, type, start, length) != -1,
                     "Could not set lock for file `"~_name~"'");
         }
+        else
+            version (WebAssembly)
+                {
+                    import core.sys.wasi.fcntl : F_RDLCK, F_SETLKW, F_WRLCK;
+                    import std.exception : errnoEnforce;
+                    immutable short type = lockType == LockType.readWrite
+                        ? F_WRLCK : F_RDLCK;
+                    errnoEnforce(lockImpl(F_SETLKW, type, start, length) != -1,
+                                 "Could not set lock for file `"~_name~"'");
+                }
         else
         version (Windows)
         {
@@ -1467,6 +1542,20 @@ specified file segment was already locked.
             return true;
         }
         else
+            version (WebAssembly)
+                {
+                    import core.stdc.errno : EACCES, EAGAIN, errno;
+                    import core.sys.wasi.fcntl : F_RDLCK, F_SETLK, F_WRLCK;
+                    import std.exception : errnoEnforce;
+                    immutable short type = lockType == LockType.readWrite
+                        ? F_WRLCK : F_RDLCK;
+                    immutable res = lockImpl(F_SETLK, type, start, length);
+                    if (res == -1 && (errno == EACCES || errno == EAGAIN))
+                        return false;
+                    errnoEnforce(res != -1, "Could not set lock for file `"~_name~"'");
+                    return true;
+                }
+        else
         version (Windows)
         {
             import core.sys.windows.winbase : GetLastError, LockFileEx, LOCKFILE_EXCLUSIVE_LOCK,
@@ -1501,6 +1590,14 @@ Removes the lock over the specified file segment.
             errnoEnforce(lockImpl(F_SETLK, F_UNLCK, start, length) != -1,
                     "Could not remove lock for file `"~_name~"'");
         }
+        else
+            version (WASI_libc)
+                {
+                    import core.sys.wasi.fcntl : F_SETLK, F_UNLCK;
+                    import std.exception : errnoEnforce;
+                    errnoEnforce(lockImpl(F_SETLK, F_UNLCK, start, length) != -1,
+                                 "Could not remove lock for file `"~_name~"'");
+                }
         else
         version (Windows)
         {
@@ -1740,6 +1837,7 @@ void main()
         return cast(S) buf;
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         import std.algorithm.comparison : equal;
@@ -1764,6 +1862,7 @@ void main()
         }}
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -1892,6 +1991,7 @@ is recommended if you want to process a complete file.
         }
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         // @system due to readln
@@ -1910,6 +2010,7 @@ is recommended if you want to process a complete file.
         assert(buffer[beyond] == 'a');
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest // bugzilla 15293
     {
         // @system due to readln
@@ -1964,6 +2065,7 @@ is recommended if you want to process a complete file.
         return buf.length;
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -2038,6 +2140,7 @@ $(CONSOLE
     }
 
     ///
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -2058,6 +2161,7 @@ $(CONSOLE
     }
 
     // backwards compatibility with pointers
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         // @system due to readf
@@ -2080,6 +2184,7 @@ $(CONSOLE
     }
 
     // backwards compatibility (mixed)
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         // @system due to readf
@@ -2101,6 +2206,7 @@ $(CONSOLE
     }
 
     // Issue 12260 - Nice error of std.stdio.readf with newlines
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -2393,6 +2499,7 @@ the contents may well have changed).
         return ByLineImpl!(Char, Terminator)(this, keepTerminator, terminator);
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -2410,6 +2517,7 @@ the contents may well have changed).
         }}
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest // Issue 19980
     {
         static import std.file;
@@ -2553,6 +2661,7 @@ $(REF readText, std,file)
             is(typeof(File("").byLineCopy!(char, char).front) == char[]));
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         import std.algorithm.comparison : equal;
@@ -2632,6 +2741,7 @@ $(REF readText, std,file)
         test("sue\r", ["sue\r"], kt, '\r');
     }
 
+    version (WebAssembly) {} else // tmpfile is not supported in WASI
     @system unittest
     {
         import std.algorithm.comparison : equal;
@@ -2683,6 +2793,7 @@ $(REF readText, std,file)
         assert(!file.isOpen);
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -2722,6 +2833,7 @@ $(REF readText, std,file)
     }
 
     ///
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
          static import std.file;
@@ -2904,6 +3016,7 @@ is empty, throws an `Exception`. In case of an I/O error throws
         return ByChunkImpl(this, buffer);
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -2929,6 +3042,7 @@ is empty, throws an `Exception`. In case of an I/O error throws
         assert(i == witness.length);
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         static import std.file;
@@ -3142,6 +3256,10 @@ is empty, throws an `Exception`. In case of an I/O error throws
                         }
                     }
                     else version (Posix)
+                        {
+                            trustedFPUTWC(c, handle_);
+                        }
+                    else version (WASI_libc)
                     {
                         trustedFPUTWC(c, handle_);
                     }
@@ -3328,6 +3446,7 @@ void main()
         return LockingBinaryWriter(this);
     }
 
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         import std.algorithm.mutation : reverse;
@@ -3413,6 +3532,7 @@ void main()
     }
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     @system struct SystemToString
@@ -3551,6 +3671,7 @@ void main()
     safeTests();
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @safe unittest
 {
     import std.exception : collectException;
@@ -3564,6 +3685,7 @@ void main()
     assert(f.tell == 0);
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     // @system due to readln
@@ -3588,6 +3710,7 @@ void main()
     assert(File(deleteme).readln() == "日本語日本語日本語日本語############日本語");
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @safe unittest // wchar -> char
 {
     static import std.file;
@@ -3633,6 +3756,7 @@ void main()
     assert(std.file.readText!string(deleteme) == "y");
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @safe unittest
 {
     import std.exception : collectException;
@@ -3643,6 +3767,7 @@ void main()
 version (StdStressTest)
 {
     // issue 15768
+    version (WebAssembly) {} else // filesystem isn't available in WASM
     @system unittest
     {
         import std.parallelism : parallel;
@@ -3757,6 +3882,7 @@ struct LockingTextReader
     }
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     // @system due to readf
@@ -3777,6 +3903,7 @@ struct LockingTextReader
     assert(x == 3);
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest // bugzilla 13686
 {
     import std.algorithm.comparison : equal;
@@ -3795,6 +3922,7 @@ struct LockingTextReader
     assert(equal(ltr, "Тест".byDchar));
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest // bugzilla 12320
 {
     static import std.file;
@@ -3809,6 +3937,7 @@ struct LockingTextReader
     assert(ltr.empty);
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest // bugzilla 14861
 {
     // @system due to readf
@@ -3888,6 +4017,7 @@ if (!is(T[0] : File))
     trustedStdout.write(args);
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -3987,6 +4117,7 @@ void writeln(T...)(T args)
     }
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -4033,6 +4164,7 @@ void writeln(T...)(T args)
             "Hello!\nHello!\nHello!\nembedded\0null\n");
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -4119,6 +4251,7 @@ void writef(Char, A...)(in Char[] fmt, A args)
     trustedStdout.writef(fmt, args);
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -4160,6 +4293,7 @@ void writefln(Char, A...)(in Char[] fmt, A args)
     trustedStdout.writefln(fmt, args);
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -4589,6 +4723,7 @@ struct lines
     }
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -4783,6 +4918,7 @@ private struct ChunksImpl
     }
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -4831,6 +4967,7 @@ if (is(typeof(copy(data, stdout.lockingBinaryWriter))))
     copy(data, File(fileName, "wb").lockingBinaryWriter);
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -5045,6 +5182,7 @@ alias stderr = makeGlobal!(StdFileHandle.stderr);
     }
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
@@ -5372,6 +5510,24 @@ private size_t readlnImpl(FILE* fps, ref char[] buf, dchar terminator, File.Orie
                 StdioException();
             return buf.length;
         }
+        else version (WASI_libc)
+            {
+                buf.length = 0;
+                for (int c; (c = FGETWC(fp)) != -1; )
+                    {
+                        import std.utf : encode;
+
+                        if ((c & ~0x7F) == 0)
+                            buf ~= cast(char) c;
+                        else
+                            encode(buf, cast(dchar) c);
+                        if (c == terminator)
+                            break;
+                    }
+                if (ferror(fps))
+                    StdioException();
+                return buf.length;
+            }
         else
         {
             static assert(0);
@@ -5513,6 +5669,7 @@ private size_t readlnImpl(FILE* fps, ref char[] buf, dchar terminator, File.Orie
     return buf.length;
 }
 
+version (WebAssembly) {} else // filesystem isn't available in WASM
 @system unittest
 {
     static import std.file;
